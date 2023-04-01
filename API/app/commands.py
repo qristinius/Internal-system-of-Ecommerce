@@ -1,5 +1,6 @@
 from flask.cli import with_appcontext
 from app.extensions import db
+from app.models import User, Card, Adress
 import click
 
 
@@ -10,8 +11,6 @@ def init_db():
     db.drop_all()
     db.create_all()
     click.echo("Finished Creating Database")
-
-
 
 
 @click.command("populate_db")
