@@ -69,7 +69,7 @@ class AuthorizationApi(Resource):
 
         user = User.query.filter_by(email=data["email"]).first()
 
-        if user and user.check_password(data["password"]):
+        if user and user._check_password(data["password"]):
             access_token = create_access_token(identity=user.email)
             responce = {'access token': access_token}
             return responce, 200
