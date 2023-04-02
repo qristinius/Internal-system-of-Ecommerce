@@ -35,10 +35,10 @@ fullnames = [f"{name} {surname}" for name,surname in zip(names,surnames)]
 
 mails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
 
-mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" for i in range(50)]
+mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" for i in range(70)]
 
 
-def create_users_registration_data(fullnames,mails,mobile_numbers ):
+def create_users_registration_data(fullnames,mails ):
 
 
     data = []
@@ -46,12 +46,11 @@ def create_users_registration_data(fullnames,mails,mobile_numbers ):
     count = 0
 
 
-    for fullname, mail, mobile_number in zip(fullnames,mails,mobile_numbers):
+    for fullname, mail, mobile_number in zip(fullnames,mails):
 
         if count< 5:
             user = {
                 "full_name" : fullname,
-                "mobile_number": mobile_number, 
                 "email": mail,
                 "role": "Admin",
                 "password": mail,
@@ -62,7 +61,6 @@ def create_users_registration_data(fullnames,mails,mobile_numbers ):
 
             user = {
                 "full_name" : fullname,
-                "mobile_number": mobile_number, 
                 "email": mail,
                 "role": "Category Manager",
                 "password": mail,
@@ -72,7 +70,6 @@ def create_users_registration_data(fullnames,mails,mobile_numbers ):
         else:
             user = {
                 "full_name" : fullname,
-                "mobile_number": mobile_number, 
                 "email": mail,
                 "role": "User",
                 "password": mail,
@@ -87,9 +84,9 @@ def create_users_registration_data(fullnames,mails,mobile_numbers ):
     return data
 
 
-def create_user_address(cities,districts):
+def create_user_address(cities,districts,mobile_numbers,fullnames ):
     data = []
-    for i in range(70):
+    for number in mobile_numbers:
         letters = "ABC"
         city = random.choice(cities)
         district = "N/A"
@@ -100,9 +97,13 @@ def create_user_address(cities,districts):
 
 
         adress = {
+            "full_name": random.choice(fullnames) ,
+            "number":  number,
+            "country": "Georgia",
             "city":city,
-            "district":district,
-            "specific_adress":specific_adress
+            "State_Province_Region":district,
+            "building_address":specific_adress,
+            "Zip_Code": random.randint(1,50)
         }
 
         data.append(adress)

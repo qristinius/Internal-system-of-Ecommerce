@@ -13,7 +13,6 @@ class RegistrationApi(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument("full_name", required=True, type=str)
-    parser.add_argument("number", required=True, type=str)
     parser.add_argument("email", required=True, type=str)
     parser.add_argument("password", required=True, type=str)
     parser.add_argument("conf_password", required=True, type=str)
@@ -30,10 +29,9 @@ class RegistrationApi(Resource):
 
         user = User(
             full_name=data["full_name"],
-            mobile_number=data["number"],
             email=data["email"],
             password=data["password"],
-
+                                        # აქ რეგისტრაციის თარიღი მაქ დასამატებელი 
             personal_id = "N/A",  # შესაცველელია 
             adress_id = 5   # აქ იცი როგორ მინდა user.address რო პირდაპირ მისამართს მიბრუნებდეს არ ვიცი ახლა მასეა თუ არა გაკეთებული
         )
