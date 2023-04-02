@@ -1,0 +1,154 @@
+import random, time
+from datetime import date
+
+names = [
+"Noah","Theo","Oliver","George","Leo","Freddie",
+"Arthur","Archie","Alfie","Charlie","Oscar","Henry",
+"Harry","Jack","Teddy","Finley","Arlo","Luca","Jacob","Tommy",
+"Lucas","Theodore","Max","Isaac","Albie","James","Mason","Rory",
+"Thomas","Rueben","Roman","Logan","Harrison","William" ,"Elijah",
+"Ethan","Joshua","Hudson","Jude","Louie","Jaxon","Reggie","Oakley",
+"Hunter","Alexander","Toby","Adam","Sebastian","Daniel", "Oscar"
+]
+
+
+
+surnames = [
+"Smith","Johnson","Williams","Brown","Jones","Garcia","Miller",
+"Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzales",
+"Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin",
+"Lee","Perez","Thompson","White","Harris","Sanchez","Clark",
+"Ramirez","Lewis","Robinson","Walker","Young","Allen","King","Wright",
+"Scott","Torres","Nguyen","Hill","Flores","Green","Adams","Nelson",
+"Baker","Hall","Rivera","Campbell","Mitchell","Carter","Roberts"
+]
+
+number_prefix = ["555","557","595", "599", "597", "571"]
+
+cities = ["Tbilisi", "Batumi", "Kutaisi", "Rustavi","Tbilisi"]
+
+districts = ["Gldani","Didube","Vake", "Isani", "Krwanisi", "Mtathminda", "Nadzaladevi","Saburtalo", "Samgori"]
+
+
+
+fullnames = [f"{name} {surname}" for name,surname in zip(names,surnames)]
+
+mails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
+
+mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" for i in range(50)]
+
+
+def create_users_registration_data(fullnames,mails,mobile_numbers ):
+
+
+    data = []
+
+    count = 0
+
+
+    for fullname, mail, mobile_number in zip(fullnames,mails,mobile_numbers):
+
+        if count< 5:
+            user = {
+                "full_name" : fullname,
+                "mobile_number": mobile_number, 
+                "email": mail,
+                "role": "Admin",
+                "password": mail,
+                "registration_date": date.today().strftime("%d/%m/%Y")
+            }
+
+        elif count< 15:
+
+            user = {
+                "full_name" : fullname,
+                "mobile_number": mobile_number, 
+                "email": mail,
+                "role": "Category Manager",
+                "password": mail,
+                "registration_date": date.today().strftime("%d/%m/%Y")
+            }
+
+        else:
+            user = {
+                "full_name" : fullname,
+                "mobile_number": mobile_number, 
+                "email": mail,
+                "role": "User",
+                "password": mail,
+                "registration_date": date.today().strftime("%d/%m/%Y")
+            }
+
+        count += 1 
+
+        data.append(user)
+
+
+    return data
+
+
+def create_user_address(cities,districts):
+    data = []
+    for i in range(70):
+        letters = "ABC"
+        city = random.choice(cities)
+        district = "N/A"
+        specific_adress = f"netasaqmemoqndes kucha {random.randint(1,50)}{random.choice(letters)}"
+        if city == "Tbilisi":
+            district = random.choice(districts)
+            specific_adress = f"{district} imasknishvilis kucha {random.randint(1,50)}{random.choice(letters)}"
+
+
+        adress = {
+            "city":city,
+            "district":district,
+            "specific_adress":specific_adress
+        }
+
+        data.append(adress)
+
+    return data
+
+
+def create_user_cards(fullnames):
+    data = []
+
+    initial_numbers = [2,3,4,5]
+
+    def str_time_prop(start, end, time_format, prop):
+        stime = time.mktime(time.strptime(start, time_format))
+        etime = time.mktime(time.strptime(end, time_format))
+
+        ptime = stime + prop * (etime - stime)
+
+        return time.strftime(time_format, time.localtime(ptime))
+
+    def random_date(start, end, prop):
+        return str_time_prop(start, end, "%d/%m/%Y", prop)
+        
+    for i in range(100):
+        card_number = f"{random.choice(initial_numbers)}{random.randint(1e14,8e14)}"
+        card_exp_date = random_date("1/1/2020", "1/1/2028", random.random())
+        conf_number = random.randint(101,999)
+        holder_name = random.choice(fullnames)
+
+        card = {
+            "card_number":card_number,
+            "card_exp_date": card_exp_date,
+            "conf_number":conf_number,
+            "holder_name": holder_name,
+        }
+
+        data.append(card)
+
+    return data
+
+
+
+
+users_registration_data = create_users_registration_data(fullnames,mails,mobile_numbers)    # სულ არის 50 სხვადასხვა იუზერი
+
+users_adress_data = create_user_address(cities,districts)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
+
+User_cards_data = create_user_cards(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
+

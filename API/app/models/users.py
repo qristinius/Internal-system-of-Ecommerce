@@ -8,7 +8,7 @@ class User(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String, unique=True, nullable=False)
-    personal_id = db.Column(db.String, unique=True, nullable=False)
+    personal_id = db.Column(db.String, unique=True, nullable=False) # ეს ამოვიღოთ არაფერში არ გამოვიყენებთ მაინც
     mobile_number = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     adress_id = db.Column(db.Integer, db.ForeignKey("user_adresses.id"))
