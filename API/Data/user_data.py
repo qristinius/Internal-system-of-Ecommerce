@@ -101,7 +101,6 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
             district = random.choice(districts)
             specific_adress = f"{district} imasknishvilis kucha {random.randint(1,50)}{random.choice(letters)}"
 
-
         adress = {
             "full_name": random.choice(fullnames) ,
             "number":  number,
@@ -109,8 +108,9 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
             "city":city,
             "State_Province_Region":district,
             "building_address":specific_adress,
-            "Zip_Code": random.randint(1,50)
+            "Zip_code": random.randint(100,500)
         }
+
 
         data.append(adress)
 
@@ -122,20 +122,9 @@ def create_user_cards(fullnames):
 
     initial_numbers = [2,3,4,5]
 
-    def str_time_prop(start, end, time_format, prop):
-        stime = time.mktime(time.strptime(start, time_format))
-        etime = time.mktime(time.strptime(end, time_format))
-
-        ptime = stime + prop * (etime - stime)
-
-        return time.strftime(time_format, time.localtime(ptime))
-
-    def random_date(start, end, prop):
-        return str_time_prop(start, end, "%d/%m/%Y", prop)
-        
     for i in range(100):
         card_number = f"{random.choice(initial_numbers)}{random.randint(1e14,8e14)}"
-        card_exp_date = random_date("1/1/2020", "1/1/2028", random.random())
+        card_exp_date = datetime.date(random.randint(2019,2023), random.randint(1,12), random.randint(1,26))
         conf_number = random.randint(101,999)
         holder_name = random.choice(fullnames)
 

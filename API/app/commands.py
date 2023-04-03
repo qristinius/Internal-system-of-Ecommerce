@@ -70,7 +70,7 @@ def populate_db():
             user = User.query.filter_by(
                 full_name=user_address.get("full_name")).first()
             user_address_ = Address(user_id=user.id, full_name=user_address.get("full_name"), mobile_number=user_address.get("number"), country_id=user_address.get("country"), city=user_address.get(
-                "city"), state_provincce_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_Code"), building_address=user_address.get("building_address"))
+                "city"), state_provincce_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_code"), building_address=user_address.get("building_address"))
             user_address_.create()
         user_address_.save()
     
