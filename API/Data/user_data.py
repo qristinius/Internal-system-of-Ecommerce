@@ -124,7 +124,7 @@ def create_user_cards(fullnames):
 
     for i in range(100):
         card_number = f"{random.choice(initial_numbers)}{random.randint(1e14,8e14)}"
-        card_exp_date = datetime.date(random.randint(2019,2023), random.randint(1,12), random.randint(1,26))
+        card_exp_date = datetime.date(random.randint(2019,2026), random.randint(1,12), random.randint(1,26))
         conf_number = random.randint(101,999)
         holder_name = random.choice(fullnames)
 
@@ -146,5 +146,5 @@ users_registration_data = create_users_registration_data(fullnames,mails)    # �
 
 users_adress_data = create_user_address(cities,districts, mobile_numbers, fullnames)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
 
-User_cards_data = create_user_cards(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
+user_cards_data = create_user_cards(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
 

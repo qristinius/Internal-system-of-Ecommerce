@@ -1,7 +1,8 @@
 from flask.cli import with_appcontext
 from app.extensions import db
-from app.models import Role, User, UserRole, Address, Country
-from Data.user_data import users_registration_data, users_adress_data
+import datetime
+from app.models import Role, User, UserRole, Address, Country, Card
+from Data.user_data import users_registration_data, users_adress_data, user_cards_data
 import click
 
 
@@ -47,7 +48,7 @@ def populate_db():
 
     click.echo("populating country table")
     create_country_table(Country)
-    click.echo("done populating user and userrole tables \n")
+    click.echo("done populating country tables \n")
 
     # populating users table
     def create_users_table(User, UserRole):
@@ -60,12 +61,12 @@ def populate_db():
             userrole_.create()
             userrole_.save()
 
-    click.echo("populating user and userrole tables")
+    click.echo("populating user and user's role tables")
     create_users_table(User, UserRole)
-    click.echo("done populating user and userrole tables \n")
+    click.echo("done populating user and user's role tables \n")
 
    # populating adresses
-    def create_adress_table(User, Address):
+    def create_address_table(User, Address):
         for user_address in users_adress_data:
             user = User.query.filter_by(
                 full_name=user_address.get("full_name")).first()
@@ -73,8 +74,27 @@ def populate_db():
                 "city"), state_provincce_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_code"), building_address=user_address.get("building_address"))
             user_address_.create()
         user_address_.save()
-    
-    click.echo("creating user adresss table")
-    create_adress_table(User, Address)
+
+    click.echo("populating user adresss table")
+    create_address_table(User, Address)
     click.echo("done populating user adress tables \n")
-    click.echo("nothing")
+
+    # populating cards
+    def creating_card_table(User, Card):
+        for user_card in user_cards_data:
+            user = User.query.filter_by(
+                full_name=user_card.get("holder_name")).first()
+            if user_card.get("card_exp_date") > datetime.date.today():
+                user_card_ = Card(user_id=user.id, card_number=user_card.get("card_number"), expiration_date=user_card.get(
+                    "card_exp_date"), unique_number=user_card.get("conf_number"), holder_name=user_card.get("holder_name"))
+            else:
+                user_card_ = Card(user_id=user.id, card_number=user_card.get("card_number"), expiration_date=user_card.get(
+                    "card_exp_date"), unique_number=user_card.get("conf_number"), holder_name=user_card.get("holder_name"), usable=False)
+            user_card_.create()
+        user_card_.save()
+
+    click.echo("populating user card table")
+    creating_card_table(User, Card)
+    click.echo("done populating user card tables \n")
+
+    click.echo("Done all")
