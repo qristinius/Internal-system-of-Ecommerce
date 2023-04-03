@@ -101,7 +101,6 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
             district = random.choice(districts)
             specific_adress = f"{district} imasknishvilis kucha {random.randint(1,50)}{random.choice(letters)}"
 
-        print(type(number))
         adress = {
             "full_name": random.choice(fullnames) ,
             "number":  number,
