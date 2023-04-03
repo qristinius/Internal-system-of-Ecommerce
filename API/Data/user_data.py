@@ -53,7 +53,7 @@ def create_users_registration_data(fullnames,mails ):
                 "email": mail,
                 "role": 1,
                 "password": mail,
-                "registration_date": str(date.today().strftime("%d/%m/%Y")) + "T24"
+                "registration_date": datetime.date(2022, 12, 25)
             }
 
         elif count< 10:

@@ -47,7 +47,7 @@ def populate_db():
 
     click.echo("populating country table")
     create_country_table(Country)
-    click.echo("done populating user and userrole tables \n")
+    click.echo("done populating country tables \n")
 
     # populating users table
     def create_users_table(User, UserRole):
@@ -65,16 +65,16 @@ def populate_db():
     click.echo("done populating user and userrole tables \n")
 
    # populating adresses
-    def create_adress_table(User, Address):
+    def create_address_table(User, Address):
         for user_address in users_adress_data:
             user = User.query.filter_by(
-                full_name=user_address.get("full_name"))
-            user_address_ = Address(user_id=user.id, full_name=user_address.get("full_name"), mobile_number=user_address.get("mobile_number"), country_id=user_address.get("country"), city=user_address.get(
-                "city"), state_provincce_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_code"), building_address=user_address.get("building_address"))
+                full_name=user_address.get("full_name")).first()
+            user_address_ = Address(user_id=user.id, full_name=user_address.get("full_name"), mobile_number=user_address.get("number"), country_id=user_address.get("country"), city=user_address.get(
+                "city"), state_provincce_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_Code"), building_address=user_address.get("building_address"))
             user_address_.create()
         user_address_.save()
     
-    click.echo("creating user adresss table")
-    create_adress_table(User, Address)
+    click.echo("populating user adresss table")
+    create_address_table(User, Address)
     click.echo("done populating user adress tables \n")
     click.echo("nothing")
