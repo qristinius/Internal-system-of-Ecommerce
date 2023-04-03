@@ -80,4 +80,5 @@ class Card(BaseModel):
     expiration_date = db.Column(db.Date, nullable=False)
     unique_number = db.Column(db.Integer, nullable=False)
     holder_name = db.Column(db.String, nullable=False)
+    usable  = db.Column(db.Boolean, default = True)
     user = db.relationship("User", backref="cards")
