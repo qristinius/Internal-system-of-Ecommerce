@@ -1,5 +1,6 @@
 import random, time
 from datetime import date
+import datetime
 
 names = [
 "Noah","Theo","Oliver","George","Leo","Freddie",
@@ -29,8 +30,6 @@ cities = ["Tbilisi", "Batumi", "Kutaisi", "Rustavi","Tbilisi"]
 
 districts = ["Gldani","Didube","Vake", "Isani", "Krwanisi", "Mtathminda", "Nadzaladevi","Saburtalo", "Samgori"]
 
-
-
 fullnames = [f"{name} {surname}" for name,surname in zip(names,surnames)]
 
 mails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
@@ -46,34 +45,41 @@ def create_users_registration_data(fullnames,mails ):
     count = 0
 
 
-    for fullname, mail, mobile_number in zip(fullnames,mails):
+    for fullname, mail in zip(fullnames,mails):
 
         if count< 5:
             user = {
                 "full_name" : fullname,
                 "email": mail,
-                "role": "Admin",
+                "role": 1,
                 "password": mail,
-                "registration_date": date.today().strftime("%d/%m/%Y")
+                "registration_date": str(date.today().strftime("%d/%m/%Y")) + "T24"
             }
 
-        elif count< 15:
+        elif count< 10:
 
             user = {
                 "full_name" : fullname,
                 "email": mail,
-                "role": "Category Manager",
+                "role": 2,
                 "password": mail,
-                "registration_date": date.today().strftime("%d/%m/%Y")
+                "registration_date": datetime.date(2022, 12, 25)
             }
-
+        elif count<15:
+                user = {
+                "full_name" : fullname,
+                "email": mail,
+                "role": 3,
+                "password": mail,
+                "registration_date": datetime.date(2022, 12, 25)
+            }
         else:
             user = {
                 "full_name" : fullname,
                 "email": mail,
-                "role": "User",
+                "role": 4,
                 "password": mail,
-                "registration_date": date.today().strftime("%d/%m/%Y")
+                "registration_date": datetime.date(2022, 12, 25)
             }
 
         count += 1 
@@ -99,7 +105,7 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
         adress = {
             "full_name": random.choice(fullnames) ,
             "number":  number,
-            "country": "Georgia",
+            "country": 2,
             "city":city,
             "State_Province_Region":district,
             "building_address":specific_adress,
@@ -147,9 +153,9 @@ def create_user_cards(fullnames):
 
 
 
-users_registration_data = create_users_registration_data(fullnames,mails,mobile_numbers)    # სულ არის 50 სხვადასხვა იუზერი
+users_registration_data = create_users_registration_data(fullnames,mails)    # სულ არის 50 სხვადასხვა იუზერი
 
-users_adress_data = create_user_address(cities,districts)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
+users_adress_data = create_user_address(cities,districts, mobile_numbers, fullnames)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
 
 User_cards_data = create_user_cards(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
 
