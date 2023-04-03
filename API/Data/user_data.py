@@ -53,7 +53,7 @@ def create_users_registration_data(fullnames,mails ):
                 "email": mail,
                 "role": 1,
                 "password": mail,
-                "registration_date": str(date.today().strftime("%d/%m/%Y")) + "T24"
+                "registration_date": datetime.date(2022, 12, 25)
             }
 
         elif count< 10:
@@ -101,7 +101,7 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
             district = random.choice(districts)
             specific_adress = f"{district} imasknishvilis kucha {random.randint(1,50)}{random.choice(letters)}"
 
-
+        print(type(number))
         adress = {
             "full_name": random.choice(fullnames) ,
             "number":  number,
@@ -109,8 +109,9 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
             "city":city,
             "State_Province_Region":district,
             "building_address":specific_adress,
-            "Zip_Code": random.randint(1,50)
+            "Zip_code": random.randint(100,500)
         }
+
 
         data.append(adress)
 
