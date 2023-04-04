@@ -2,7 +2,7 @@ from flask.cli import with_appcontext
 from app.extensions import db
 import datetime
 from app.models import Role, User, UserRole, Address, Country, Card
-from Data.user_data import users_registration_data, users_adress_data, user_cards_data
+from Data.initial.user.data import user_data, address_data, card_data
 import click
 
 
@@ -52,12 +52,12 @@ def populate_db():
 
     # populating users table
     def create_users_table(User, UserRole):
-        for user in users_registration_data:
+        for user in user_data:
             user_ = User(full_name=user.get("full_name"), email=user.get(
                 "email"), password=user.get("password"), registration_date=user.get("registration_date"))
             user_.create()
             user_.save()
-            userrole_ = UserRole(user_id=user_.id, role_id=user.get("role"))
+            userrole_ = UserRole(user_id=user_.id, role_id=user.get("role_id"))
             userrole_.create()
             userrole_.save()
 
@@ -67,7 +67,7 @@ def populate_db():
 
    # populating adresses
     def create_address_table(User, Address):
-        for user_address in users_adress_data:
+        for user_address in address_data:
             user = User.query.filter_by(
                 full_name=user_address.get("full_name")).first()
             user_address_ = Address(user_id=user.id, full_name=user_address.get("full_name"), mobile_number=user_address.get("number"), country_id=user_address.get("country"), city=user_address.get(
@@ -81,9 +81,9 @@ def populate_db():
 
     # populating cards
     def creating_card_table(User, Card):
-        for user_card in user_cards_data:
+        for user_card in card_data:
             user = User.query.filter_by(
-                full_name=user_card.get("holder_name")).first()
+                full_name=user_card.get("user_full_name")).first()
             if user_card.get("card_exp_date") > datetime.date.today():
                 user_card_ = Card(user_id=user.id, card_number=user_card.get("card_number"), expiration_date=user_card.get(
                     "card_exp_date"), unique_number=user_card.get("conf_number"), holder_name=user_card.get("holder_name"))
