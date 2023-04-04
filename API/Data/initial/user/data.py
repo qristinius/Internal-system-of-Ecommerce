@@ -102,5 +102,3 @@ address_data = address_populate_data(Full_names,Mobile_numbers,Cities,Districts)
 card_data = card_populate_data(Full_names)
 
 
-for i in card_data:
-    print(i)

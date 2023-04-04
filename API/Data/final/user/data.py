@@ -32,7 +32,7 @@ mails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
 mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" for i in range(50)]
 
 
-def create_users_registration_data(fullnames,mails ):
+def user_populate_data(fullnames,mails ):
 
 
     data = []
@@ -85,7 +85,7 @@ def create_users_registration_data(fullnames,mails ):
     return data
 
 
-def create_user_address(cities,districts,mobile_numbers,fullnames ):
+def address_populate_data(cities,districts,mobile_numbers,fullnames ):
     data = []
     for number in mobile_numbers:
         letters = "ABC"
@@ -111,7 +111,7 @@ def create_user_address(cities,districts,mobile_numbers,fullnames ):
     return data
 
 
-def create_user_cards(fullnames):
+def card_populate_data(fullnames):
     data = []
 
     initial_numbers = [2,3,4,5]
@@ -137,12 +137,9 @@ def create_user_cards(fullnames):
 
 
 
-users_registration_data = create_users_registration_data(fullnames,mails)    # სულ არის 50 სხვადასხვა იუზერი
+user_data = user_populate_data(fullnames,mails)    # სულ არის 50 სხვადასხვა იუზერი
 
-users_adress_data = create_user_address(cities,districts, mobile_numbers, fullnames)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
+address_data = address_populate_data(cities,districts, mobile_numbers, fullnames)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
 
-user_cards_data = create_user_cards(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
+card_data = card_populate_data(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
 
-
-for i in user_cards_data:
-    print(i)
