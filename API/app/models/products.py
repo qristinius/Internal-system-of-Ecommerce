@@ -2,6 +2,15 @@ from app.extensions import db
 from app.models.base import BaseModel
 
 
+class Cart(BaseModel):
+    __tablename__  = "cart"
+
+    id = db.Column(db.Integer, primary_key = True)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+
+
 class Product(BaseModel):
     __tablename__ = "products"
 
@@ -12,6 +21,7 @@ class Product(BaseModel):
     qunatity = db.Column(db.Integer)
     description = db.Column(db.String)
     official_link = db.Column(db.String)
+    user = db.relationship("User", secondary = "cart", backref = "product_cart")
 
 
 class Price(BaseModel):
