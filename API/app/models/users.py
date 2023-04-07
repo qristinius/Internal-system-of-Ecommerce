@@ -19,8 +19,9 @@ class User(BaseModel):
     email = db.Column(db.String, unique=True, nullable=False)
     _password = db.Column("password", db.String, nullable=False)
     reset_password = db.Column(db.Boolean, default=False)
-    registration_date = db.Column(db.Date)
     confirmation = db.Column(db.Boolean, default=False)
+    registration_date = db.Column(db.Date)
+
 
     def _get_password(self):
         return self._password
@@ -56,9 +57,10 @@ class Address(BaseModel):
     mobile_number = db.Column(db.String, nullable=False)
     country_id = db.Column(db.Integer, db.ForeignKey("countries.id"))
     city = db.Column(db.String, nullable=False)
-    state_provincce_region = db.Column(db.String, nullable=False)
-    zip_code = db.Column(db.String, nullable=False)
+    state_province_region = db.Column(db.String, nullable=False)
     building_address = db.Column(db.String, nullable=False)
+    zip_code = db.Column(db.String, nullable=False)
+
     user = db.relationship("User", backref="address")
 
 
@@ -67,7 +69,7 @@ class Country(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    adress = db.relationship("Address", backref="country")
+    adress = db.relationship("Address", backref="country", uselist = False)
 
 
 class Card(BaseModel):
@@ -77,8 +79,9 @@ class Card(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
 
     card_number = db.Column(db.String, nullable=False)
-    expiration_date = db.Column(db.Date, nullable=False)
-    unique_number = db.Column(db.Integer, nullable=False)
+    cvv = db.Column(db.Integer, nullable=False)
     holder_name = db.Column(db.String, nullable=False)
     usable  = db.Column(db.Boolean, default = True)
+    expiration_date = db.Column(db.Date, nullable=False)
+
     user = db.relationship("User", backref="cards")
