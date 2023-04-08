@@ -22,7 +22,7 @@ class Product(BaseModel):
     __tablename__ = "products"
 
     id = db.Column(db.Integer, primary_key=True)
-    price_id = db.Column(db.Integer, db.Foreignkey("prices.id"))
+    price_id = db.Column(db.Integer, db.ForeignKey("prices.id"))
     brand_id = db.Column(db.Integer, db.ForeignKey("brands.id"))
 
     name = db.Column(db.String)

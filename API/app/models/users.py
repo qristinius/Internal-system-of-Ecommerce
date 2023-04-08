@@ -62,6 +62,8 @@ class Address(BaseModel):
     zip_code = db.Column(db.String, nullable=False)
 
     user = db.relationship("User", backref="address")
+    purchase = db.relationship("Purchase", secondary = "adresses_of_purchases", backref = "purchase_address")
+
 
 
 class Country(BaseModel):
