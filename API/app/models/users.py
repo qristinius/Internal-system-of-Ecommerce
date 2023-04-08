@@ -41,49 +41,9 @@ class Role(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    can_create_role = db.Column(db.Boolean)
-    can_create_product = db.Column(db.Boolean)
-    can_create_sales = db.Column(db.Boolean)
+    can_create_role = db.Column(db.Boolean, default = False)
+    can_create_product = db.Column(db.Boolean , default = False)
+    can_create_sales = db.Column(db.Boolean , default = False)
     user = db.relationship("User", secondary="user_roles", backref="role")
 
 
-class Address(BaseModel):
-    __tablename__ = "user_addresses"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
-    
-    full_name = db.Column(db.String, nullable = False)
-    mobile_number = db.Column(db.String, nullable=False)
-    country_id = db.Column(db.Integer, db.ForeignKey("countries.id"))
-    city = db.Column(db.String, nullable=False)
-    state_province_region = db.Column(db.String, nullable=False)
-    building_address = db.Column(db.String, nullable=False)
-    zip_code = db.Column(db.String, nullable=False)
-
-    user = db.relationship("User", backref="address")
-    purchase = db.relationship("Purchase", secondary = "adresses_of_purchases", backref = "purchase_address")
-
-
-
-class Country(BaseModel):
-    __tablename__ = "countries"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    adress = db.relationship("Address", backref="country", uselist = False)
-
-
-class Card(BaseModel):
-    __tablename__ = "user_card_info"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
-
-    card_number = db.Column(db.String, nullable=False)
-    cvv = db.Column(db.Integer, nullable=False)
-    holder_name = db.Column(db.String, nullable=False)
-    usable  = db.Column(db.Boolean, default = True)
-    expiration_date = db.Column(db.Date, nullable=False)
-
-    user = db.relationship("User", backref="cards")

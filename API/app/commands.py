@@ -71,7 +71,7 @@ def populate_db():
             user = User.query.filter_by(
                 full_name=user_address.get("full_name")).first()
             user_address_ = Address(user_id=user.id, full_name=user_address.get("full_name"), mobile_number=user_address.get("number"), country_id=user_address.get("country"), city=user_address.get(
-                "city"), state_provincce_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_code"), building_address=user_address.get("building_address"))
+                "city"), state_province_region=user_address.get("State_Province_Region"), zip_code=user_address.get("Zip_code"), building_address=user_address.get("building_address"))
             user_address_.create()
         user_address_.save()
 
@@ -86,10 +86,10 @@ def populate_db():
                 full_name=user_card.get("user_full_name")).first()
             if user_card.get("card_exp_date") > datetime.date.today():
                 user_card_ = Card(user_id=user.id, card_number=user_card.get("card_number"), expiration_date=user_card.get(
-                    "card_exp_date"), unique_number=user_card.get("conf_number"), holder_name=user_card.get("holder_name"))
+                    "card_exp_date"), cvv=user_card.get("conf_number"), holder_name=user_card.get("holder_name"))
             else:
                 user_card_ = Card(user_id=user.id, card_number=user_card.get("card_number"), expiration_date=user_card.get(
-                    "card_exp_date"), unique_number=user_card.get("conf_number"), holder_name=user_card.get("holder_name"), usable=False)
+                    "card_exp_date"), cvv=user_card.get("conf_number"), holder_name=user_card.get("holder_name"), usable=False)
             user_card_.create()
         user_card_.save()
 
