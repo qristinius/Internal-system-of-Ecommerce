@@ -32,114 +32,128 @@ mails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
 mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" for i in range(50)]
 
 
-def user_populate_data(fullnames,mails ):
 
 
+
+
+
+
+def create_workers_data():
     data = []
 
-    count = 0
+    Names = ["Anri", "Ruso", "Christine"]
+    Lastname = ["Tvalabeishvili", "Kvesitazde", "Dzneladze"]
+    Emails = [f"{name}.{lastname}@gmail.com" for name, lastname in zip(Names, Lastname)]
+    Full_names = [f"{name} {lastname}" for name, lastname in zip(Names, Lastname)]
+    Roles = [1, 2, 3]
 
-
-    for fullname, mail in zip(fullnames,mails):
-
-        if count< 2:
-            user = {
-                "full_name" : fullname,
-                "email": mail,
-                "role": 1,
-                "password": mail,
-                "registration_date": datetime.date(random.randint(2019,2022), random.randint(1,12), random.randint(1,26))
-            }
-
-        elif count< 5:
-
-            user = {
-                "full_name" : fullname,
-                "email": mail,
-                "role": 2,
-                "password": mail,
-                "registration_date": datetime.date(random.randint(2019,2022), random.randint(1,12), random.randint(1,26))
-            }
-        elif count<9:
-                user = {
-                "full_name" : fullname,
-                "email": mail,
-                "role": 3,
-                "password": mail,
-                "registration_date":  datetime.date(random.randint(2019,2022), random.randint(1,12), random.randint(1,26))
-            }
-        else:
-            user = {
-                "full_name" : fullname,
-                "email": mail,
-                "role": 4,
-                "password": mail,
-                "registration_date": datetime.date(random.randint(2019,2022), random.randint(1,12), random.randint(1,26))
-            }
-
-        count += 1 
-
+    for full_name, email, role in zip(Full_names,Emails,Roles):
+        user = {
+                "full_name" : full_name,
+                "email": email,
+                "role_id": role,
+                "password": email,
+                "registration_date": datetime.date(2022, 12, 25)
+            }   
         data.append(user)
 
-
     return data
 
 
-def address_populate_data(cities,districts,mobile_numbers,fullnames ):
+def user_populate_data(Full_names,Emails, Number_prefix, Cities, Districts):
     data = []
-    for number in mobile_numbers:
-        letters = "ABC"
-        city = random.choice(cities)
-        district = "N/A"
-        building_address = f"{city}, bilbo baggins's {random.randint(1,50)}{random.choice(letters)}"
-        if city == "Tbilisi":
-            district = random.choice(districts)
-            building_address = f"Tbilisi, {district}, middle earth's {random.randint(1,50)}{random.choice(letters)}"
+    
+    
 
-        adress = {
-            "full_name": random.choice(fullnames[9:]) ,
-            "number":  number,
-            "country": 2,
-            "city":city,
-            "State_Province_Region":district,
-            "building_address":building_address,
-            "Zip_code": random.randint(100,500)
-        }
+    for full_name, email in zip(Full_names,Emails):
 
-        data.append(adress)
+        
+        def create_user():
+
+            user = {
+                    "full_name" : full_name,
+                    "email": email,
+                    "role_id": 4,
+                    "password": email,
+                    "registration_date": datetime.date(2022, 12, 25)
+                }  
+            
+            return user
+        
+
+        def create_card():
+            cards = []
+            for i in range(random.randint(1,3)):
+
+                card_number = f"{random.randint(2,5)}{random.randint(1e14,8e14)}"
+                card_exp_date = datetime.date(random.randint(2019,2026), random.randint(1,12), random.randint(1,26))
+                cvv = random.randint(101,999)
+
+                card = {
+                    "holder_name": full_name.upper(),
+                    "card_number":card_number,
+                    "cvv":cvv,
+                    "card_exp_date": card_exp_date,
+                }
+
+                cards.append(card)
+
+            return cards
+        
+
+        def create_address():
+            addresses = []
+
+            for i in range(random.randint(1,3)):
+
+                mobile_number = f"{random.choice(Number_prefix )}{random.randint(1e5,9e5)}"
+                city = random.choice(Cities)
+
+
+
+                if city == "Tbilisi":
+                    district = random.choice(Districts)
+                    address = {
+                        "full_name": full_name ,
+                        "mobile_number":  mobile_number,
+                        "country_id": 2,
+                        "city":city,
+                        "State_Province_Region":district,
+                        "building_address":f"{city}, {district}, middle earth {random.randint(10,25)}",
+                        "Zip_code": random.randint(100,500)
+                    }
+                else:
+                    address = {
+                        "full_name": full_name ,
+                        "mobile_number":  mobile_number,
+                        "country_id": 2,
+                        "city":city,
+                        "State_Province_Region":"N/A",
+                        "building_address":f"{city}, bilbo baggins's {random.randint(10,25)}",
+                        "Zip_code": random.randint(100,500)
+                    }
+
+                addresses.append(address)
+
+            return addresses
+
+
+        data.append([create_user() , create_card(), create_address()])
+
+
+
 
     return data
 
 
-def card_populate_data(fullnames):
-    data = []
-
-    initial_numbers = [2,3,4,5]
-
-    for i in range(70):
-        card_number = f"{random.choice(initial_numbers)}{random.randint(1e14,8e14)}"
-        card_exp_date = datetime.date(random.randint(2019,2026), random.randint(1,12), random.randint(1,26))
-        conf_number = random.randint(101,999)
-        holder_name = random.choice(fullnames)
-
-        card = {
-            "user_full_name": holder_name,
-            "card_number":card_number,
-            "card_exp_date": card_exp_date,
-            "conf_number":conf_number,
-            "holder_name": holder_name.upper(),
-        }
-
-        data.append(card)
-
-    return data
 
 
 
 
-user_data = user_populate_data(fullnames,mails)    # სულ არის 50 სხვადასხვა იუზერი
+#[{}, [{},{} ....], [{},{} .....]]     this is template of datga 
 
-address_data = address_populate_data(cities,districts, mobile_numbers, fullnames)   # ერთ იუზერს შეუძლია რამდენიმე მისამართი ქონდეს და იქ გაგზავნოს ნივთი, ამიტომ სულ 70 მისამართი დავაგენერირე
+complete_admin_populate_data = create_workers_data()
+complete_user_populate_data =  user_populate_data(Full_names, Emails, Number_prefix, Cities, Districts)
 
-card_data = card_populate_data(fullnames)  # ერთ იუზერს შეუძლია რამდენიმე ბარათი ქონდეს, ამიტომ სულ 100 ბარათი დავაგენერირე
+
 
