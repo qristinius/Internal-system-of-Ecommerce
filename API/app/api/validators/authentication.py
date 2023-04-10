@@ -2,15 +2,14 @@ from email_validator import validate_email
 
 
 def validate_name(name):
-
-    try: 
+    try:
         name = name.split(" ")
 
         if name[0].isalpha() and name[1].isalpha() and len(name[0] + name[1]) >= 4:
             return True
     except:
         return False
-    
+
 
 def validate_password(password):
     if len(password) > 6:
@@ -25,7 +24,7 @@ def mail_validator(email):
         return False
 
 
-def user_exist_check(email,number, User):
+def user_exist_check(email, number, User):
     if bool(User.query.filter_by(email=email).first()):
         return "This mail is already redgistered"
 
@@ -33,9 +32,7 @@ def user_exist_check(email,number, User):
         return "This number is already redgistered"
 
 
-
 def validate_registration_data(data, User):
-
     if not validate_name(data["full_name"]):
         return "Invalid name"
 

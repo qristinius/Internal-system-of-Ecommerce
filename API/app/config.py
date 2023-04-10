@@ -14,5 +14,6 @@ class Config(object):
     MAIL_USERNAME = '769b12411b12b0'
     MAIL_PASSWORD = '57cbda838b314c'
 
+
 class Constants:
     SERIALIZER_SALT = "12345678"
