@@ -1,5 +1,5 @@
 import random
-from datetime import date
+from datetime import date, datetime
 
 Names = ["Theo", "George", "Leo", "Arthur", "Archie", "Alfie", "Oscar", "Henry", "Harry", "Jack", "Teddy", "Finley",
          "Arlo", "Luca", "Jacob", "Tommy", "Lucas", "Theodore", "Max", "Isaac", "Albie", "James", "Mason", "Rory",
@@ -35,7 +35,9 @@ def create_workers_data():
             "email": email,
             "role_id": role,
             "password": email,
-            "registration_date": date(2022, 12, 25)
+            "registration_date": datetime(random.randint(2019, 2022), random.randint(1, 12),
+                                          random.randint(1, 26), random.randint(1, 12),
+                                          random.randint(1, 59), random.randint(1, 59)).isoformat()
         }
         data.append(user)
 
@@ -54,8 +56,9 @@ def user_populate_data(full_names, emails, number_prefix, cities, districts):
                 "email": email,
                 "role_id": 4,
                 "password": email,
-                "registration_date": date(random.randint(2019, 2022), random.randint(1, 12),
-                                          random.randint(1, 26))
+                "registration_date": datetime(random.randint(2019, 2022), random.randint(1, 12),
+                                              random.randint(1, 26), random.randint(1, 12),
+                                              random.randint(1, 59), random.randint(1, 59)).isoformat()
             }
 
             return user
