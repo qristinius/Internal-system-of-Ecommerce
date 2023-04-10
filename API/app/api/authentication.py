@@ -1,7 +1,7 @@
 from flask import render_template
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token
-from datetime import date
+from datetime import datetime
 from app.models.users import User, UserRole
 from app.api.validators.authentication import validate_registration_data
 from app.api.validators.mail import create_key, send_email
@@ -24,7 +24,7 @@ class RegistrationApi(Resource):
         user = User(full_name=data["full_name"],
                     email=data["email"].lower().replace('.', ''),
                     password=data["password"],
-                    registration_date=date.today()
+                    registration_date=datetime.today().isoformat()
                     )
         user.create()
 
