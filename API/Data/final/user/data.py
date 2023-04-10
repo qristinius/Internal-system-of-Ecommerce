@@ -2,34 +2,20 @@ import random, time
 from datetime import date
 import datetime
 
-names = [
-"Anri","Theo","Christina","George","Leo","Ruso",
-"Arthur","Archie","Alfie","Niniko","Oscar","Henry",
-"Harry","Jack","Teddy","Finley","Arlo","Luca","Jacob","Tommy",
-"Lucas","Theodore","Max","Isaac","Albie","James","Mason","Rory",
-"Thomas","Rueben","Roman","Logan","Harrison","William" ,"Elijah"
-]
 
 
-surnames = [
-"Tvalabeishvili","Johnson","Dzneladze","Brown","Jones","Kvesitadze","Miller",
-"Davis","Rodriguez","Kvesitadze","Hernandez","Lopez","Gonzales",
-"Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin",
-"Lee","Perez","Thompson","White","Harris","Sanchez","Clark",
-"Ramirez","Lewis","Robinson","Walker","Young","Allen","King","Wright"
-]
+names = ["Theo","George","Leo","Arthur","Archie","Alfie","Oscar","Henry", "Harry","Jack","Teddy","Finley","Arlo","Luca","Jacob","Tommy","Lucas","Theodore","Max","Isaac","Albie","James","Mason","Rory","Thomas","Rueben","Roman","Logan","Harrison","William"]
+surnames = ["Johnson","Brown","Jones","Miller","Davis","Rodriguez","Hernandez","Lopez","Gonzales","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin","Lee","Perez","Thompson","White","Harris","Sanchez","Clark","Ramirez","Lewis","Robinson","Walker","Young","Allen","King"]
 
-number_prefix = ["555","557","595", "599", "597", "571"]
+Number_prefix = ["568", "571", "574", "579", "592", "597", "500", "550", "555", "593", "514", "557", "558", "544", "511", "522", "533", "505", "575", "585", "551", "591", "595", "596", "598", "599"]
 
-cities = ["Tbilisi", "Batumi", "Kutaisi", "Rustavi","Tbilisi"]
+Cities = ["Tbilisi", "Batumi", "Kutaisi", "Rustavi","Gori", "Samtredia", "Tbilisi", "Tbilisi" ]
 
-districts = ["Gldani","Didube","Vake", "Isani", "Krwanisi", "Mtathminda", "Nadzaladevi","Saburtalo", "Samgori"]
+Districts = ["Gldani","Didube","Vake", "Isani", "Krwanisi", "Mtathminda", "Nadzaladevi","Saburtalo", "Samgori"]
 
-fullnames = [f"{name} {surname}" for name,surname in zip(names,surnames)]
+Full_names = [f"{name} {surname}" for name,surname in zip(names,surnames)]
 
-mails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
-
-mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" for i in range(50)]
+Emails = [f"{name}.{surname}@gmail.com" for name,surname in zip(names,surnames)]
 
 
 
@@ -41,11 +27,11 @@ mobile_numbers = [f"{random.choice(number_prefix )}{random.randint(1e5,9e5)}" fo
 def create_workers_data():
     data = []
 
-    Names = ["Anri", "Ruso", "Christine"]
-    Lastname = ["Tvalabeishvili", "Kvesitazde", "Dzneladze"]
+    Names = ["Anri", "Ruso", "Christine", "Zura", "Nino", "Dato"]
+    Lastname = ["Tvalabeishvili", "Kvesitazde", "Dzneladze", "Dzneladze", "Kvesitazde", "Adeishvili"]
     Emails = [f"{name}.{lastname}@gmail.com" for name, lastname in zip(Names, Lastname)]
     Full_names = [f"{name} {lastname}" for name, lastname in zip(Names, Lastname)]
-    Roles = [1, 2, 3]
+    Roles = [1, 1, 2, 2, 3, 3]
 
     for full_name, email, role in zip(Full_names,Emails,Roles):
         user = {
@@ -75,7 +61,7 @@ def user_populate_data(Full_names,Emails, Number_prefix, Cities, Districts):
                     "email": email,
                     "role_id": 4,
                     "password": email,
-                    "registration_date": datetime.date(2022, 12, 25)
+                    "registration_date": datetime.date(random.randint(2019,2022), random.randint(1,12), random.randint(1,26))
                 }  
             
             return user
@@ -104,7 +90,7 @@ def user_populate_data(Full_names,Emails, Number_prefix, Cities, Districts):
         def create_address():
             addresses = []
 
-            for i in range(random.randint(1,3)):
+            for i in range(random.randint(1,2)):
 
                 mobile_number = f"{random.choice(Number_prefix )}{random.randint(1e5,9e5)}"
                 city = random.choice(Cities)
@@ -147,13 +133,11 @@ def user_populate_data(Full_names,Emails, Number_prefix, Cities, Districts):
 
 
 
-
-
-
 #[{}, [{},{} ....], [{},{} .....]]     this is template of datga 
 
 complete_admin_populate_data = create_workers_data()
 complete_user_populate_data =  user_populate_data(Full_names, Emails, Number_prefix, Cities, Districts)
+
 
 
 
