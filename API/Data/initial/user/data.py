@@ -54,7 +54,7 @@ def user_populate_data(Full_names,Emails, Number_prefix, Cities, Districts):
         def create_user():
 
             user = {
-                    "full_name" : full_name,
+                    "full_name": full_name,
                     "email": email,
                     "role_id": 4,
                     "password": email,
@@ -135,7 +135,7 @@ def user_populate_data(Full_names,Emails, Number_prefix, Cities, Districts):
 
 #[{}, [{},{} ....], [{},{} .....]]     this is template of datga 
 
-complete_admin_populate_data = create_workers_data()
+complete_admin_populate_data  =  create_workers_data()
 complete_user_populate_data =  user_populate_data(Full_names, Emails, Number_prefix, Cities, Districts)
 
 
