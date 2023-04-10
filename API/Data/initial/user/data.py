@@ -26,10 +26,10 @@ def create_workers_data():
     for full_name, email, role in zip(full_names, emails, roles):
         user = {
             "full_name": full_name,
-            "email": email,
+            "email": email.lower().replace('.', ''),
             "role_id": role,
-            "password": email,
-            "registration_date": date(2022, 12, 25)
+            "password": "Admin",
+            "registration_date": date(2022, 12, 25).isoformat()
         }
         data.append(user)
 
@@ -45,10 +45,10 @@ def user_populate_data(full_names, emails, number_prefix, cities, districts):
 
             user = {
                 "full_name": full_name,
-                "email": email,
+                "email": email.lower().replace('.', ''),
                 "role_id": 4,
-                "password": email,
-                "registration_date": date(2022, 12, 25)
+                "password": "Admin",
+                "registration_date": date(2022, 12, 25).isoformat()
             }
 
             return user

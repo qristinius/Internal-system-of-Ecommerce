@@ -20,7 +20,7 @@ class User(BaseModel):
     _password = db.Column("password", db.String, nullable=False)
     reset_password = db.Column(db.Boolean, default=False)
     confirmation = db.Column(db.Boolean, default=False)
-    registration_date = db.Column(db.Date)
+    registration_date = db.Column(db.Text)
 
     def _get_password(self):
         return self._password
@@ -28,7 +28,7 @@ class User(BaseModel):
     def _set_password(self, password):
         self._password = generate_password_hash(password)
 
-    def _check_password(self, password):
+    def check_password(self, password):
         return check_password_hash(self.password, password)
 
     password = db.synonym("_password", descriptor=property(
