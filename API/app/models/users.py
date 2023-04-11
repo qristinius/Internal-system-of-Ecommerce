@@ -22,6 +22,8 @@ class User(BaseModel):
     confirmation = db.Column(db.Boolean, default=False)
     registration_date = db.Column(db.Text)
 
+    comment = db.relationship("ProductComment", backref = "user")
+
     def _get_password(self):
         return self._password
 
@@ -43,4 +45,6 @@ class Role(BaseModel):
     can_create_role = db.Column(db.Boolean, default=False)
     can_create_product = db.Column(db.Boolean, default=False)
     can_create_sales = db.Column(db.Boolean, default=False)
+    can_deliver_items = db.Column(db.Boolean, default=False)
+    can_send_message = db.Column(db.Boolean, default = False)
     user = db.relationship("User", secondary="user_roles", backref="role")

@@ -16,6 +16,8 @@ class Address(BaseModel):
     state_province_region = db.Column(db.String, nullable=False)
     building_address = db.Column(db.String, nullable=False)
     zip_code = db.Column(db.String, nullable=False)
+    deleted = db.Column(db.Boolean, default = False)
+    used = db.Column(db.Boolean, default = False)
 
     user = db.relationship("User", backref="address")
     purchase = db.relationship("Purchase", backref="purchase_address")
