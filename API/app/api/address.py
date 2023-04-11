@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.users import User
 from app.api.validators.address import validate_address_data
 
+
 class AddaddressApi(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument("country", required=True, type=str)
@@ -23,8 +24,6 @@ class AddaddressApi(Resource):
         if validation:
             return validation, 400
 
-
-
         # user = User(
         #     full_name=data["full_name"],
         #     email=data["email"],
@@ -33,11 +32,8 @@ class AddaddressApi(Resource):
         # user.create()
         # user.save()
 
-
-
     @jwt_required()
     def get(self):
         current_user = get_jwt_identity()
-
 
         # უკან გავაგზავნო ამ მომხმარებლის ყველა დამატებული მისამართი
