@@ -24,17 +24,15 @@ def populate_db():
     def create_roles_table(Role):
         click.echo("Populating roles table")
 
-        role_ = Role(name="Admin", can_create_role=True,
-                     can_create_product=False, can_create_sales=False)
+        role_ = Role(name="Admin", can_create_role=True, can_send_message=True)
         role_.create()
-        role_ = Role(name="Category Manager", can_create_role=False,
-                     can_create_product=True, can_create_sales=True)
+        role_ = Role(name="Category Manager",can_create_product=True, can_create_sales=True, can_send_message=True)
         role_.create()
-        role_ = Role(name="Moderator", can_create_role=False,
-                     can_create_product=True, can_create_sales=False)
+        role_ = Role(name="Moderator", can_create_product=True, can_send_message=True)
         role_.create()
-        role_ = Role(name="User", can_create_role=False,
-                     can_create_product=False, can_create_sales=False)
+        role_ = Role(name="User")
+        role_.create()
+        role_ = Role(name="Delivery", can_deliver_items=True, can_send_message=True)
         role_.create()
         role_.save()
 
@@ -64,7 +62,8 @@ def populate_db():
             worker_.create()
             worker_.save()
 
-            worker_role_ = UserRole(user_id=worker_.id, role_id=worker.get("role_id"))
+            worker_role_ = UserRole(
+                user_id=worker_.id, role_id=worker.get("role_id"))
             worker_role_.create()
             worker_role_.save()
         click.echo("done populating employees and employee's role tables \n")
@@ -80,7 +79,8 @@ def populate_db():
             user_.create()
             user_.save()
 
-            user_role_ = UserRole(user_id=user_.id, role_id=user_info.get("role_id"))
+            user_role_ = UserRole(
+                user_id=user_.id, role_id=user_info.get("role_id"))
             user_role_.create()
             user_role_.save()
 
@@ -89,13 +89,15 @@ def populate_db():
                 if user_card.get("card_exp_date") > datetime.date.today():
                     card_ = Card(user_id=user_.id,
                                  card_number=user_card.get("card_number"),
-                                 expiration_date=user_card.get("card_exp_date"),
+                                 expiration_date=user_card.get(
+                                     "card_exp_date"),
                                  cvv=user_card.get("cvv"),
                                  holder_name=user_card.get("holder_name"))
                 else:
                     card_ = Card(user_id=user_.id,
                                  card_number=user_card.get("card_number"),
-                                 expiration_date=user_card.get("card_exp_date"),
+                                 expiration_date=user_card.get(
+                                     "card_exp_date"),
                                  cvv=user_card.get("cvv"),
                                  holder_name=user_card.get("holder_name"),
                                  usable=False)
@@ -106,10 +108,12 @@ def populate_db():
             for user_address in all_user_info[2]:
                 address_ = Address(user_id=user_.id,
                                    full_name=user_address.get("full_name"),
-                                   mobile_number=user_address.get("mobile_number"),
+                                   mobile_number=user_address.get(
+                                       "mobile_number"),
                                    country_id=user_address.get("country_id"),
                                    city=user_address.get("city"),
-                                   state_province_region=user_address.get("State_Province_Region"),
+                                   state_province_region=user_address.get(
+                                       "State_Province_Region"),
                                    zip_code=user_address.get("Zip_code"),
                                    building_address=user_address.get("building_address"))
                 address_.create()
