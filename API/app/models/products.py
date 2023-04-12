@@ -35,6 +35,7 @@ class Product(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     price_id = db.Column(db.Integer, db.ForeignKey("prices.id"))
     brand_id = db.Column(db.Integer, db.ForeignKey("brands.id"))
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id")) 
 
     name = db.Column(db.String)
     model = db.Column(db.String)
@@ -44,7 +45,6 @@ class Product(BaseModel):
     score = db.Column(db.Float)
     
     user = db.relationship("User", secondary="cart", backref="product_cart")
-
 
 class Price(BaseModel):
     __tablename__ = "prices"
