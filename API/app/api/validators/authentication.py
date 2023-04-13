@@ -2,7 +2,6 @@ from email_validator import validate_email
 
 
 def validate_name(name):
-
     def check_name(user_name):
         full_name = ""
         for i in range(len(user_name)):
@@ -35,8 +34,17 @@ def mail_validator(email):
 
 
 def user_exist_check(email, user_table):
-    if bool(user_table.query.filter_by(email=email.lower().replace('.', '')).first()):
+    if bool(user_table.query.filter_by(email=modify_mail(email)).first()):
         return True
+
+
+def modify_mail(email):
+    email = email.lower().split("@")
+
+    prefix = email[0].replace('.', '')
+    suffix = email[1]
+
+    return f"{prefix}@{suffix}"
 
 
 def validate_registration_data(data, user_table):
@@ -54,3 +62,6 @@ def validate_registration_data(data, user_table):
 
     if user_exist_check(data["email"], user_table):
         return "This mail is already registered"
+
+
+

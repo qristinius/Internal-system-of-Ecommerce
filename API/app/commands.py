@@ -30,7 +30,7 @@ def populate_db():
         role_.create()
         role_ = Role(name="Moderator", can_create_product=True, can_send_message=True)
         role_.create()
-        role_ = Role(name="User")
+        role_ = Role(name="User", can_create_address=True)
         role_.create()
         role_ = Role(name="Delivery", can_deliver_items=True, can_send_message=True)
         role_.create()

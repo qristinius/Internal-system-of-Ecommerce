@@ -1,39 +1,125 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.users import User
+from app.models.user_info import Address, Country
 from app.api.validators.address import validate_address_data
 
 
-class AddaddressApi(Resource):
+class AddressApi(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument("country", required=True, type=str)
     parser.add_argument("full_name", required=True, type=str)
-    parser.add_argument("City", required=True, type=str)
-    parser.add_argument("number", required=True, type=str)
-    parser.add_argument("State_Province_Region", required=True, type=str)
+    parser.add_argument("mobile_number", required=True, type=str)
+    parser.add_argument("country_id", required=True, type=str)
+    parser.add_argument("city", required=True, type=str)
+    parser.add_argument("state_province_region", required=True, type=str)
     parser.add_argument("building_address", required=True, type=str)
-    parser.add_argument("Zip_Code", required=True, type=str)
+    parser.add_argument("zip_code", required=True, type=str)
 
     @jwt_required()
     def post(self):
-        current_user = get_jwt_identity()
-        data = self.parser.parse_args()
+        args = self.parser.parse_args()
 
-        validation = validate_address_data(data)
+        current_user = get_jwt_identity()
+        validation = validate_address_data(args, Country)
 
         if validation:
             return validation, 400
 
-        # user = User(
-        #     full_name=data["full_name"],
-        #     email=data["email"],
-        # )                             # ამათ მაგივრად უნდა ჩავამტო მონაცემთა ბაზაში იუზერის დამატებული მისამართი
+        user = User.query.filter_by(email=current_user).first()
 
-        # user.create()
-        # user.save()
+        if not user.check_permission("can_create_address"):
+            return "Bad request", 400
+
+
+        address = Address(user_id=user.id,
+                          full_name=args["full_name"],
+                          mobile_number=args["mobile_number"],
+                          country_id=args["country_id"],
+                          city=args["city"],
+                          state_province_region=args["state_province_region"],
+                          building_address=args["building_address"],
+                          zip_code=args["zip_code"]
+                          )
+
+        address.create()
+        address.save()
+
+        return "Success", 200
 
     @jwt_required()
     def get(self):
         current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+        results = Address.query.filter_by(user_id=user.id).all()
 
-        # უკან გავაგზავნო ამ მომხმარებლის ყველა დამატებული მისამართი
+        if not user.check_permission("can_create_address"):
+            return "Bad request", 400
+
+        if not results:
+            return "Bad request", 400
+
+        data = []
+        for address in results:
+            if not address.deleted:
+                user_address = {
+                    "address_id": address.id,
+                    "full_name": address.full_name,
+                    "mobile_number": address.mobile_number,
+                    "country_id": address.country_id,
+                    "city": address.city,
+                    "state_province_region": address.state_province_region,
+                    "building_address": address.building_address,
+                    "zip_code": address.zip_code,
+                }
+                data.append(user_address)
+
+        return data, 200
+
+    @jwt_required()
+    def put(self):
+        self.parser.add_argument("address_id", required=True, type=str)
+        args = self.parser.parse_args()
+
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+
+        if not user.check_permission("can_create_address"):
+            return "Bad request", 400
+
+        result = Address.query.filter_by(id=args["address_id"]).first()
+
+        if not result:
+            return "Bad request", 400
+
+        result.full_name = args["full_name"]
+        result.mobile_number = args["mobile_number"]
+        result.country_id = args["country_id"]
+        result.city = args["city"]
+        result.state_province_region = args["state_province_region"]
+        result.building_address = args["building_address"]
+        result.zip_code = args["zip_code"]
+        result.save()
+
+        return "Success", 200
+
+    @jwt_required()
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("address_id", required=True, type=int)
+        args = parser.parse_args()
+
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+
+        if not user.check_permission("can_create_address"):
+            return "Bad request", 400
+
+        result = Address.query.filter_by(id=args["address_id"]).first()
+
+        if not result:
+            return "Bad request", 400
+
+        result.deleted = True
+        result.save()
+
+        return "Success", 200
