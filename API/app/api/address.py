@@ -120,4 +120,3 @@ class AddressApi(Resource):
         result.save()
 
         return "Success", 200
-
