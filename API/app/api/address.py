@@ -18,7 +18,6 @@ class AddressApi(Resource):
     @jwt_required()
     def post(self):
         args = self.parser.parse_args()
-
         current_user = get_jwt_identity()
         validation = validate_address_data(args, Country)
 
@@ -29,7 +28,6 @@ class AddressApi(Resource):
 
         if not user.check_permission("can_create_address"):
             return "Bad request", 400
-
 
         address = Address(user_id=user.id,
                           full_name=args["full_name"],
@@ -50,16 +48,15 @@ class AddressApi(Resource):
     def get(self):
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
-        results = Address.query.filter_by(user_id=user.id).all()
 
         if not user.check_permission("can_create_address"):
             return "Bad request", 400
 
-        if not results:
+        if not user.address:
             return "Bad request", 400
 
         data = []
-        for address in results:
+        for address in user.address:
             if not address.deleted:
                 user_address = {
                     "address_id": address.id,
@@ -78,8 +75,8 @@ class AddressApi(Resource):
     @jwt_required()
     def put(self):
         self.parser.add_argument("address_id", required=True, type=str)
-        args = self.parser.parse_args()
 
+        args = self.parser.parse_args()
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 
@@ -106,8 +103,8 @@ class AddressApi(Resource):
     def delete(self):
         parser = reqparse.RequestParser()
         parser.add_argument("address_id", required=True, type=int)
-        args = parser.parse_args()
 
+        args = parser.parse_args()
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 

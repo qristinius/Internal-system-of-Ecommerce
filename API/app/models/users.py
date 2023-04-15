@@ -38,8 +38,8 @@ class User(BaseModel):
 
     def check_permission(self, request):
         permissions = [getattr(permission, request) for permission in self.role]
-
         return any(permissions)
+
 
 class Role(BaseModel):
     __tablename__ = "roles"
@@ -52,4 +52,5 @@ class Role(BaseModel):
     can_deliver_items = db.Column(db.Boolean, default=False)
     can_send_message = db.Column(db.Boolean, default=False)
     can_create_address = db.Column(db.Boolean, default=False)
+    can_create_card = db.Column(db.Boolean, default=False)
     user = db.relationship("User", secondary="user_roles", backref="role")

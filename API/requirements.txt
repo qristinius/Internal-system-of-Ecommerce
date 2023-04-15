@@ -8,4 +8,5 @@ flask_mail==0.9.1
 flask_jwt_extended==4.4.4
 SQLAlchemy==2.0.1
 Werkzeug==2.2.2
+cryptography==40.0.1
 

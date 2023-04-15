@@ -30,7 +30,7 @@ def populate_db():
         role_.create()
         role_ = Role(name="Moderator", can_create_product=True, can_send_message=True)
         role_.create()
-        role_ = Role(name="User", can_create_address=True)
+        role_ = Role(name="User", can_create_address=True, can_create_card=True)
         role_.create()
         role_ = Role(name="Delivery", can_deliver_items=True, can_send_message=True)
         role_.create()
@@ -91,14 +91,12 @@ def populate_db():
                                  card_number=user_card.get("card_number"),
                                  expiration_date=user_card.get(
                                      "card_exp_date"),
-                                 cvv=user_card.get("cvv"),
                                  holder_name=user_card.get("holder_name"))
                 else:
                     card_ = Card(user_id=user_.id,
                                  card_number=user_card.get("card_number"),
                                  expiration_date=user_card.get(
                                      "card_exp_date"),
-                                 cvv=user_card.get("cvv"),
                                  holder_name=user_card.get("holder_name"),
                                  usable=False)
                 card_.create()

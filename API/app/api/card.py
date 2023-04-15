@@ -1,36 +1,98 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.users import User
 from app.models.user_info import Card
-from app.api.validators.address import validate_address_data
+from app.api.validators.card import validate_card_data, check_card_existence
 
 
-class AddressApi(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("full_name", required=True, type=str)
-    parser.add_argument("mobile_number", required=True, type=str)
-    parser.add_argument("country_id", required=True, type=str)
-    parser.add_argument("city", required=True, type=str)
-    parser.add_argument("state_province_region", required=True, type=str)
-    parser.add_argument("building_address", required=True, type=str)
-    parser.add_argument("zip_code", required=True, type=str)
+class CardsApi(Resource):
 
     @jwt_required()
     def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("card_number", required=True, type=str)
+        parser.add_argument("holder_name", required=True, type=str)
+        parser.add_argument("cvv", required=True, type=str)
+        parser.add_argument("expiration_date", required=True, type=inputs.datetime_from_iso8601)
 
+        args = parser.parse_args()
+        current_user = get_jwt_identity()
+        validation = validate_card_data(args)
+
+        if validation:
+            return validation, 400
+
+        user = User.query.filter_by(email=current_user).first()
+
+        if not user.check_permission("can_create_card"):
+            return "Bad request", 400
+
+        # if not bank_accept:
+        #     return "bad request", 400
+
+        for card in user.cards:
+            if check_card_existence(card, args):
+                if not card.deleted:
+                    return "this card is already added", 200
+
+                card.deleted = False
+                card.save()
+                return "Success", 200
+
+        new_card = Card(user_id=user.id,
+                        card_number=args["card_number"],
+                        holder_name=args["holder_name"].upper(),
+                        expiration_date=args["expiration_date"],
+                        )
+
+        new_card.create()
+        new_card.save()
         return "Success", 200
 
     @jwt_required()
     def get(self):
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
 
-        return "Success", 200
+        if not user.check_permission("can_create_card"):
+            return "Bad request", 400
 
-    @jwt_required()
-    def put(self):
+        data = []
+        for card in user.cards:
+            if not card.deleted:
+                user_card = {
+                    "card_number": card.encrypt_card_number(),
+                    "holder_name": card.holder_name,
+                    "expiration_date": card.expiration_date,
+                    "expired": not card.usable
+                }
 
-        return "Success", 200
+                data.append(user_card)
+
+        return data, 200
 
     @jwt_required()
     def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("card_number", required=True, type=str)
+        parser.add_argument("holder_name", required=True, type=str)
+        parser.add_argument("expiration_date", required=True, type=inputs.datetime_from_iso8601)
 
-        return "Success", 200
+        args = parser.parse_args()
+        current_user = get_jwt_identity()
+
+        user = User.query.filter_by(email=current_user).first()
+
+        if not user.check_permission("can_create_card"):
+            return "Bad request", 400
+
+        for card in user.cards:
+
+            if check_card_existence(card, args):
+                if card.deleted:
+                    return "bad request", 400
+                card.deleted = True
+                card.save()
+                return "Success", 200
+
+        return "bad request", 400

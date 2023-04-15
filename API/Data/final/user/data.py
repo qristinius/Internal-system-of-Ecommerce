@@ -74,7 +74,6 @@ def user_populate_data(full_names, emails, number_prefix, cities, districts):
                 card = {
                     "holder_name": full_name.upper(),
                     "card_number": card_number,
-                    "cvv": cvv,
                     "card_exp_date": card_exp_date,
                 }
 
