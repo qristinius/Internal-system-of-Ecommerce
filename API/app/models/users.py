@@ -16,13 +16,13 @@ class User(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String, unique=True, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column("email", db.String, unique=True, nullable=False)
     _password = db.Column("password", db.String, nullable=False)
     reset_password = db.Column(db.Boolean, default=False)
     confirmation = db.Column(db.Boolean, default=False)
     registration_date = db.Column(db.Text)
 
-    comment = db.relationship("ProductComment", backref = "user")
+    comment = db.relationship("ProductComment", backref="user")
 
     def _get_password(self):
         return self._password
@@ -36,6 +36,10 @@ class User(BaseModel):
     password = db.synonym("_password", descriptor=property(
         _get_password, _set_password))
 
+    def check_permission(self, request):
+        permissions = [getattr(permission, request) for permission in self.role]
+        return any(permissions)
+
 
 class Role(BaseModel):
     __tablename__ = "roles"
@@ -46,5 +50,7 @@ class Role(BaseModel):
     can_create_product = db.Column(db.Boolean, default=False)
     can_create_sales = db.Column(db.Boolean, default=False)
     can_deliver_items = db.Column(db.Boolean, default=False)
-    can_send_message = db.Column(db.Boolean, default = False)
+    can_send_message = db.Column(db.Boolean, default=False)
+    can_create_address = db.Column(db.Boolean, default=False)
+    can_create_card = db.Column(db.Boolean, default=False)
     user = db.relationship("User", secondary="user_roles", backref="role")

@@ -1,6 +1,7 @@
 from app.extensions import db
 from app.models.base import BaseModel
-from werkzeug.security import generate_password_hash, check_password_hash
+from cryptography.fernet import Fernet
+from app.models.users import User
 
 
 class Address(BaseModel):
@@ -16,8 +17,8 @@ class Address(BaseModel):
     state_province_region = db.Column(db.String, nullable=False)
     building_address = db.Column(db.String, nullable=False)
     zip_code = db.Column(db.String, nullable=False)
-    deleted = db.Column(db.Boolean, default = False)
-    used = db.Column(db.Boolean, default = False)
+    deleted = db.Column(db.Boolean, default=False)
+    used = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", backref="address")
     purchase = db.relationship("Purchase", backref="purchase_address")
@@ -28,7 +29,7 @@ class Country(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    adress = db.relationship("Address", backref="country", uselist=False)
+    address = db.relationship("Address", backref="country", uselist=False)
 
 
 class Card(BaseModel):
@@ -38,33 +39,32 @@ class Card(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
 
     _card_number = db.Column("card_number", db.String, nullable=False)
-    _cvv = db.Column("cvv", db.Integer, nullable=False)
     holder_name = db.Column(db.String, nullable=False)
     usable = db.Column(db.Boolean, default=True)
-    expiration_date = db.Column(db.Date, nullable=False)
-
+    expiration_date = db.Column(db.TEXT, nullable=False)
+    # აქ დასამატებელი იქნება რომელი ბარათია და რა ტიპისაა
+    deleted = db.Column(db.Boolean, default=False)
     user = db.relationship("User", backref="cards")
 
     def _get_card_number(self):
         return self._card_number
 
-    def _get_cvv(self):
-        return self._cvv
-
     def _set_card_number(self, card_number):
-        self._card_number = generate_password_hash(str(card_number))
+        user = User.query.filter_by(id=self.user_id).first()
+        secret = Fernet(user.password[-43:] + "=")
+        self._card_number = secret.encrypt(bytes(str(card_number), 'utf-8'))
 
-    def _set_cvv(self, cvv):
-        self._cvv = generate_password_hash(str(cvv))
+    def check_card_number(self, card_number):
+        user = User.query.filter_by(id=self.user_id).first()
+        secret = Fernet(user.password[-43:] + "=")
+        if self.card_number == secret.encrypt(bytes(str(card_number), 'utf-8')):
+            return True
 
-    def _check_card_number(self, card_number):
-        return check_password_hash(self.card_number, card_number)
-
-    def _check_cvv(self, cvv):
-        return check_password_hash(self.cvv, cvv)
+    def encrypt_card_number(self):
+        user = User.query.filter_by(id=self.user_id).first()
+        secret = Fernet(user.password[-43:] + "=")
+        card_number = str(secret.decrypt(self.card_number))
+        return card_number[-5:-1]
 
     card_number = db.synonym("_card_number", descriptor=property(
         _get_card_number, _set_card_number))
-
-    cvv = db.synonym("_cvv", descriptor=property(
-        _get_cvv, _set_cvv))
