@@ -1,5 +1,6 @@
 import random
 from datetime import date, datetime
+from app.api.validators.authentication import modify_mail
 
 Names = ["Theo", "George", "Leo", "Arthur", "Archie", "Alfie", "Oscar", "Henry", "Harry", "Jack", "Teddy", "Finley",
          "Arlo", "Luca", "Jacob", "Tommy", "Lucas", "Theodore", "Max", "Isaac", "Albie", "James", "Mason", "Rory",
@@ -32,9 +33,9 @@ def create_workers_data():
     for full_name, email, role in zip(full_names, emails, roles):
         user = {
             "full_name": full_name,
-            "email": email,
+            "email": modify_mail(email),
             "role_id": role,
-            "password": email,
+            "password": modify_mail(email),
             "registration_date": datetime(random.randint(2019, 2022), random.randint(1, 12),
                                           random.randint(1, 26), random.randint(1, 12),
                                           random.randint(1, 59), random.randint(1, 59)).isoformat()
@@ -53,9 +54,9 @@ def user_populate_data(full_names, emails, number_prefix, cities, districts):
 
             user = {
                 "full_name": full_name,
-                "email": email,
+                "email": modify_mail(email),
                 "role_id": 4,
-                "password": email,
+                "password": modify_mail(email),
                 "registration_date": datetime(random.randint(2019, 2022), random.randint(1, 12),
                                               random.randint(1, 26), random.randint(1, 12),
                                               random.randint(1, 59), random.randint(1, 59)).isoformat()
@@ -73,7 +74,6 @@ def user_populate_data(full_names, emails, number_prefix, cities, districts):
                 card = {
                     "holder_name": full_name.upper(),
                     "card_number": card_number,
-                    "cvv": cvv,
                     "card_exp_date": card_exp_date,
                 }
 

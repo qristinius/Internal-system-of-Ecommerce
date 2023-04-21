@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token
 from datetime import datetime
 from app.models.users import User, UserRole
-from app.api.validators.authentication import validate_registration_data
+from app.api.validators.authentication import validate_registration_data, modify_mail
 from app.api.validators.mail import create_key, send_email
 
 
@@ -15,15 +15,15 @@ class RegistrationApi(Resource):
     parser.add_argument("conf_password", required=True, type=str)
 
     def post(self):
-        data = self.parser.parse_args()
-        validation = validate_registration_data(data, User)
+        args = self.parser.parse_args()
+        validation = validate_registration_data(args, User)
 
         if validation:
             return validation, 400
 
-        user = User(full_name=data["full_name"],
-                    email=data["email"].lower().replace('.', ''),
-                    password=data["password"],
+        user = User(full_name=args["full_name"],
+                    email=modify_mail(args["email"]),
+                    password=args["password"],
                     registration_date=datetime.today().isoformat()
                     )
         user.create()
@@ -34,10 +34,10 @@ class RegistrationApi(Resource):
         user.save()
         user_role.save()
 
-        key = create_key(data["email"])
+        key = create_key(modify_mail(args["email"]))
         html = render_template('_activation_massage.html', key=key)
 
-        send_email(subject="Confirm your account", html=html, recipients=data["email"])
+        send_email(subject="Confirm your account", html=html, recipients=args["email"])
 
         return "Success", 200
 
@@ -50,13 +50,13 @@ class AuthorizationApi(Resource):
 
     def post(self):
 
-        data = self.parser.parse_args()
+        args = self.parser.parse_args()
 
-        user = User.query.filter_by(email=data["email"].lower().replace('.', '')).first()
+        user = User.query.filter_by(email=modify_mail(args["email"])).first()
 
-        if user and user.check_password(data["password"]):
+        if user and user.check_password(args["password"]):
             access_token = create_access_token(identity=user.email)
-            response = {'access token': access_token}
+            response = {'token': access_token}
             return response, 200
 
         else:
