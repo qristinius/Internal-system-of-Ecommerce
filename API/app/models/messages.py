@@ -7,13 +7,13 @@ class Message(BaseModel):
 
     id = db.Column(db.Integer, primary_key = True)
     sender = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
-    reciever = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
+    receiver = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
     message = db.Column(db.Text)
     file_path = db.Column(db.String)
     date = db.Column(db.Text)
     deleted = db.Column(db.Boolean, default = False)
     sender_ref = db.relationship("User", backref = "sent_message", foreign_keys=[sender])
-    receiver_ref = db.relationship("User", backref = "recieved_message", foreign_keys=[reciever])
+    receiver_ref = db.relationship("User", backref = "recieved_message", foreign_keys=[receiver])
 
 
 class Reply(BaseModel):
