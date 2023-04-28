@@ -134,6 +134,5 @@ dmypy.json
 db.sqlite
 
 # data from web scraping
-
 Web Scraping/Alta Data
 Web Scraping/Data/Photos
