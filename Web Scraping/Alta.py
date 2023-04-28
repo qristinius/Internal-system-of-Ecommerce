@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from PIL import Image
 import requests, time, json, os, random, string
-from Alta_links import *
+from Links import *
 
 letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
 
@@ -107,11 +107,8 @@ def miner(links, category):
 # miner(links_for_printers_scanners_supplies[1:], links_for_printers_scanners_supplies[0])
 # miner(links_for_notebooks_accessories[1:], links_for_notebooks_accessories[0])
 # miner(links_for_phones_communications[1:], links_for_phones_communications[0])
-miner(links_for_tV_photo_video_audio_game_consoles[1:], links_for_tV_photo_video_audio_game_consoles[0])
+# miner(links_for_tV_photo_video_audio_game_consoles[1:], links_for_tV_photo_video_audio_game_consoles[0])
 # miner(links_for_home_appliances[1:], links_for_home_appliances[0])
 # miner(links_for_kitchen_appliances[1:], links_for_kitchen_appliances[0])
 # miner(links_for_house[1:], links_for_house[0])
 
-# "?items_per_page=18"
-# "?sl=en"
-# "https://alta.ge/computers-and-office/pcs-notebooks-and-accessories/notebooks.html"
