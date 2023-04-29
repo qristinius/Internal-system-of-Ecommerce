@@ -1,7 +1,7 @@
 import os, time
 import json
 
-path = f"{os.getcwd()}\\Alta Data"
+path = f"{os.getcwd()}\\Alta Data\\Products"
 dir_list = os.listdir(path)
 
 files = {}

@@ -80,10 +80,10 @@ def miner(links, category):
         item_links = product_links(product_link, item_quantity)
 
         filename = product_link.split("/")[-1][:-5]
-        exist = os.path.exists(f'Alta Data/{category}')
+        exist = os.path.exists(f'Alta Data/Products/{category}')
         if not exist:
-            os.makedirs(f'Alta Data/{category}')
-        file = open(f'Alta Data/{category}/{filename}.txt', 'w')
+            os.makedirs(f'Alta Data/Products/{category}')
+        file = open(f'Alta Data/Products/{category}/{filename}.txt', 'w')
 
         print(f"start {filename} mining ...")
         count = 0
@@ -100,7 +100,7 @@ def miner(links, category):
     time.sleep(10)
 
 
-# miner(links_for_pc_components[1:], links_for_pc_components[0])
+#miner(links_for_pc_components[1:], links_for_pc_components[0])
 # miner(links_for_monitors_projectors[1:], links_for_monitors_projectors[0])
 # miner(links_for_tablets_accessories[1:], links_for_tablets_accessories[0])
 # miner(links_for_computer_accessories[1:], links_for_computer_accessories[0])
