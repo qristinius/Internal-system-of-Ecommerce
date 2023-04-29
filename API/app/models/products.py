@@ -17,6 +17,7 @@ class PurchaseProduct(BaseModel):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     purchase_id = db.Column(db.Integer, db.ForeignKey("purchases.id"))
 
+
 class ProductComment(BaseModel):
     __tablename__ = "product_comments"
 
@@ -25,8 +26,8 @@ class ProductComment(BaseModel):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
 
     comment = db.Column(db.Text)
-    picture_comment = db.Column(db.String) #this is photopath 
-    comment = db.relationship("Product", backref = "comments")
+    picture_comment = db.Column(db.String)  # this is photopath
+    comment = db.relationship("Product", backref="comments")
 
 
 class Product(BaseModel):
@@ -35,7 +36,7 @@ class Product(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     price_id = db.Column(db.Integer, db.ForeignKey("prices.id"))
     brand_id = db.Column(db.Integer, db.ForeignKey("brands.id"))
-    category_id = db.Column(db.Integer, db.ForeignKey("categories.id")) 
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
 
     name = db.Column(db.String)
     model = db.Column(db.String)
@@ -43,8 +44,9 @@ class Product(BaseModel):
     official_link = db.Column(db.String)
     photo_path = db.Column(db.String)
     score = db.Column(db.Float)
-    
+
     user = db.relationship("User", secondary="cart", backref="product_cart")
+
 
 class Price(BaseModel):
     __tablename__ = "prices"
@@ -58,8 +60,6 @@ class Price(BaseModel):
     sale = db.Column(db.Boolean)
     sale_start_date = db.Column(db.Date)
     sale_end_date = db.Column(db.Date)
-
-
 
 
 class Brand(BaseModel):
