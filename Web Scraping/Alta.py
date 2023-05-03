@@ -100,7 +100,7 @@ def miner(links, category):
     time.sleep(10)
 
 
-#miner(links_for_pc_components[1:], links_for_pc_components[0])
+# miner(links_for_pc_components[1:], links_for_pc_components[0])
 # miner(links_for_monitors_projectors[1:], links_for_monitors_projectors[0])
 # miner(links_for_tablets_accessories[1:], links_for_tablets_accessories[0])
 # miner(links_for_computer_accessories[1:], links_for_computer_accessories[0])

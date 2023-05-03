@@ -1,9 +1,107 @@
 from flask.cli import with_appcontext
 from app.extensions import db
-import datetime
+from datetime import datetime
+import json
 from app.models import Role, User, UserRole, Address, Country, Card
-from Data.initial.user.data import complete_admin_populate_data, complete_user_populate_data
 import click
+
+
+# global functions
+
+# populating roles table
+def create_roles_table(role_class):
+    click.echo("Populating roles table \n")
+
+    role = role_class(name="Admin", can_create_role=True, can_send_message=True)
+    role.create()
+    role = role_class(name="Category Manager", can_create_product=True, can_create_sales=True, can_see_stats=True,
+                      can_send_message=True)
+    role.create()
+    role = role_class(name="Moderator", can_create_product=True, can_create_sales=True, can_send_message=True)
+    role.create()
+    role = role_class(name="Delivery", can_deliver_items=True, can_send_message=True)
+    role.create()
+    role = role_class(name="User", can_modify_profile=True, can_write_comment=True, can_rate_product=True,
+                      can_buy_product=True)
+    role.create()
+    role.save()
+
+
+# populating country table
+def create_country_table(country_class):
+    click.echo("populating country table \n")
+
+    file = open('Data/Countries.txt', 'r')
+    content = file.read().split("\n")
+    for item in content:
+        country = country_class(name=item)
+        country.create()
+        country.save()
+
+
+# populating User, Card, Address tables
+def create_users_table(size, user_class, user_role_class, card_class, address_class):
+    click.echo("populating: user, address and card tables \n")
+    file = open('Data/Users.txt', 'r')
+    data = file.read().split(";\n")
+
+    for all_user_info in data[size[0]:size[1]]:
+        user_data = json.loads(all_user_info)
+
+        user_info = user_data["user"]
+        user_ = user_class(full_name=user_info.get("full_name"),
+                           email=user_info.get("email"),
+                           password=user_info.get("password"),
+                           registration_date=user_info.get("registration_date"))
+        user_.create()
+        user_.save()
+
+        user_role_ = user_role_class(
+            user_id=user_.id, role_id=user_info.get("role_id"))
+        user_role_.create()
+        user_role_.save()
+
+        try:
+            for user_card in user_data["user_card"]:
+
+                if datetime.fromisoformat(user_card.get("card_exp_date")) > datetime.now():
+                    card_ = card_class(user_id=user_.id,
+                                       card_number=user_card.get("card_number"),
+                                       expiration_date=user_card.get(
+                                           "card_exp_date"),
+                                       holder_name=user_card.get("holder_name"),
+                                       brand=user_card.get("brand"))
+                else:
+                    card_ = card_class(user_id=user_.id,
+                                       card_number=user_card.get("card_number"),
+                                       expiration_date=user_card.get(
+                                           "card_exp_date"),
+                                       holder_name=user_card.get("holder_name"),
+                                       usable=False,
+                                       brand=user_card.get("brand"))
+
+                card_.create()
+
+                card_.save()
+
+            for user_address in user_data["user_address"]:
+                address_ = address_class(user_id=user_.id,
+                                         full_name=user_address.get("full_name"),
+                                         mobile_number=user_address.get(
+                                             "mobile_number"),
+                                         country_id=user_address.get("country_id"),
+                                         city=user_address.get("city"),
+                                         state_province_region=user_address.get(
+                                             "State_Province_Region"),
+                                         zip_code=user_address.get("Zip_code"),
+                                         building_address=user_address.get("building_address"))
+                address_.create()
+
+                address_.save()
+
+        except:
+
+            continue
 
 
 @click.command("init_db")
@@ -15,113 +113,25 @@ def init_db():
     click.echo("Finished Creating Database")
 
 
+@click.command("populate_test_db")
+@with_appcontext
+def populate_test_db():
+    click.echo("\n")
+
+    create_roles_table(Role)
+    create_country_table(Country)
+    create_users_table([0, 7], User, UserRole, Card, Address)
+
+    click.echo("Done all")
+
+
 @click.command("populate_db")
 @with_appcontext
 def populate_db():
     click.echo("\n")
 
-    # populating roles table
-    def create_roles_table(Role):
-        click.echo("Populating roles table")
-
-        role_ = Role(name="Admin", can_create_role=True, can_send_message=True)
-        role_.create()
-        role_ = Role(name="Category Manager",can_create_product=True, can_create_sales=True, can_send_message=True)
-        role_.create()
-        role_ = Role(name="Moderator", can_create_product=True, can_send_message=True)
-        role_.create()
-        role_ = Role(name="User", can_create_address=True, can_create_card=True)
-        role_.create()
-        role_ = Role(name="Delivery", can_deliver_items=True, can_send_message=True)
-        role_.create()
-        role_.save()
-
-        click.echo("finished creating roles table\n")
-
-    # populating country table
-    def create_country_table(Country):
-        click.echo("populating country table")
-
-        countries = ["USA", "Georgia", "Germany"]
-        for country in countries:
-            country_ = Country(name=country)
-            country_.create()
-        country_.save()
-
-        click.echo("done populating country tables \n")
-
-    # function for populating [users, address, card] tables
-    def create_users_table(User, UserRole, Card, Address):
-
-        click.echo("populating employees and employee's role tables")
-        for worker in complete_admin_populate_data:
-            worker_ = User(full_name=worker.get("full_name"),
-                           email=worker.get("email"),
-                           password=worker.get("password"),
-                           registration_date=worker.get("registration_date"))
-            worker_.create()
-            worker_.save()
-
-            worker_role_ = UserRole(
-                user_id=worker_.id, role_id=worker.get("role_id"))
-            worker_role_.create()
-            worker_role_.save()
-        click.echo("done populating employees and employee's role tables \n")
-
-        click.echo("populating: user, address and card tables")
-        for all_user_info in complete_user_populate_data:
-
-            user_info = all_user_info[0]
-            user_ = User(full_name=user_info.get("full_name"),
-                         email=user_info.get("email"),
-                         password=user_info.get("password"),
-                         registration_date=user_info.get("registration_date"))
-            user_.create()
-            user_.save()
-
-            user_role_ = UserRole(
-                user_id=user_.id, role_id=user_info.get("role_id"))
-            user_role_.create()
-            user_role_.save()
-
-            for user_card in all_user_info[1]:
-
-                if user_card.get("card_exp_date") > datetime.date.today():
-                    card_ = Card(user_id=user_.id,
-                                 card_number=user_card.get("card_number"),
-                                 expiration_date=user_card.get(
-                                     "card_exp_date"),
-                                 holder_name=user_card.get("holder_name"))
-                else:
-                    card_ = Card(user_id=user_.id,
-                                 card_number=user_card.get("card_number"),
-                                 expiration_date=user_card.get(
-                                     "card_exp_date"),
-                                 holder_name=user_card.get("holder_name"),
-                                 usable=False)
-                card_.create()
-
-            card_.save()
-
-            for user_address in all_user_info[2]:
-                address_ = Address(user_id=user_.id,
-                                   full_name=user_address.get("full_name"),
-                                   mobile_number=user_address.get(
-                                       "mobile_number"),
-                                   country_id=user_address.get("country_id"),
-                                   city=user_address.get("city"),
-                                   state_province_region=user_address.get(
-                                       "State_Province_Region"),
-                                   zip_code=user_address.get("Zip_code"),
-                                   building_address=user_address.get("building_address"))
-                address_.create()
-
-            address_.save()
-        click.echo("done populating: user, address and card tables \n")
-
-    # populating users table
     create_roles_table(Role)
     create_country_table(Country)
-    create_users_table(User, UserRole, Card, Address)
+    create_users_table([0, -1], User, UserRole, Card, Address)
 
     click.echo("Done all")

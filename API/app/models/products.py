@@ -47,7 +47,6 @@ class Product(BaseModel):
     user = db.relationship("User", secondary="cart", backref="product_cart")
     
 
-
 class Price(BaseModel):
     __tablename__ = "prices"
     id = db.Column(db.Integer, primary_key=True)
