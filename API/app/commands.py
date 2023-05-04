@@ -1,9 +1,10 @@
 from flask.cli import with_appcontext
 from app.extensions import db
-from datetime import datetime
-import json
-from app.models import Role, User, UserRole, Address, Country, Card, Category, Attribute
-import click
+# from datetime import datetime, timedelta
+import datetime, click, random, json, os
+from app.models import Role, User, UserRole, Address, Country, Card, Category, Attribute, Brand, Product, Price, \
+    ProductAttribute
+
 
 
 # global functions
@@ -40,12 +41,12 @@ def create_country_table(country_class):
 
 
 # populating User, Card, Address table
-def create_users_table(size, user_class, user_role_class, card_class, address_class):
+def create_users_table(user_class, user_role_class, card_class, address_class, quantity=-1):
     click.echo("populating: user, address and card tables \n")
     file = open('Data/Users.txt', 'r')
     data = file.read().split(";\n")
 
-    for all_user_info in data[size[0]:size[1]]:
+    for all_user_info in data[0:quantity]:
         user_data = json.loads(all_user_info)
 
         user_info = user_data["user"]
@@ -64,7 +65,7 @@ def create_users_table(size, user_class, user_role_class, card_class, address_cl
         try:
             for user_card in user_data["user_card"]:
 
-                if datetime.fromisoformat(user_card.get("card_exp_date")) > datetime.now():
+                if datetime.datetime.fromisoformat(user_card.get("card_exp_date")) > datetime.datetime.today():
                     card_ = card_class(user_id=user_.id,
                                        card_number=user_card.get("card_number"),
                                        expiration_date=user_card.get(
@@ -145,27 +146,165 @@ def create_category_table(category_table):
                 secondary.save()
 
 
-# populating Attribute tables
+# populating Attribute table
 def create_attribute_table(attribute_table, category_table):
     click.echo("populating Attribute table \n")
 
     file = open('Data/Attributes.txt', 'r')
     content = json.loads(file.read())
     category_names = list(content.keys())
-
     for category_name in category_names:
         category = category_table.query.filter_by(name=category_name).first()
         attributes = content[category_name]
         for attribute in attributes:
-            main = attribute_table(name=attribute, category_id=category.id)
-            main.create()
-            main.save()
+            if attribute != "price":
+                main = attribute_table(name=attribute, category_id=category.id)
+                main.create()
+                main.save()
+
+        main = attribute_table(name="online_img", category_id=category.id)
+        main.create()
+        main = attribute_table(name="img", category_id=category.id)
+
+        main.create()
+        main.save()
+
+
+# populating brand table
+def create_brand_table(brand_table):
+    click.echo("populating Brand table \n")
+    file = open('Data/Brands.txt', 'r')
+    content = file.read().split("\n")
+
+    for brand in list(content):
+        main = brand_table(brand_name=brand)
+        main.create()
+        main.save()
+
+
+# populating product, price, ProductAttribute tables
+def create_product_table(product_table, category_table, attribute_table, brand_table, price_table,
+                         product_attribute_table, quantity=-1):
+    path = f"{os.getcwd()}\\Data\\Products"
+    dir_list = os.listdir(path)
+
+    files = {}
+    categories = []
+
+    def price_generator(price, price_table):
+        try:
+            price = int(price)
+            margin = random.randint(30, 50)
+            sale_margin = random.randint(10, 30)
+            original_price = price * (100 - margin) / 100
+            sale_price = price * (100 - sale_margin) / 100
+
+            if random.randint(1, 5) == 2:
+                start_date = datetime.datetime.today().isoformat()
+                end_date = (datetime.datetime.today() + datetime.timedelta(days=40)).isoformat()
+
+                main = price_table(original_price=original_price, selling_price=price, sale_price=sale_price, sale=True,
+                                   sale_start_date=start_date, sale_end_date=end_date, margin=sale_margin)
+                main.create()
+                main.save()
+            else:
+                main = price_table(original_price=original_price, selling_price=price, sale_price=sale_price,
+                                   margin=margin)
+                main.create()
+                main.save()
+
+            return main
+        except:
+            return False
+
+    def img_generator(attributes):
+        online_img = []
+        img = []
+
+        response = {
+            "online_img": online_img,
+            "img": img
+        }
+
+        for attribute in product_attributes:
+            if "online_img" in attribute:
+                online_img.append(product[attribute])
+            elif "img" in attribute:
+                img.append(product[attribute])
+
+        return response
+
+    for category in dir_list:
+        new_path = f"{path}\\{category}"
+        dir_list = os.listdir(new_path)
+
+        categories.append(category)
+        files[category] = dir_list
+
+    for category in categories:
+        file_names = files[category]
+        for file_name in file_names:
+            click.echo(f"        start {file_name} \n")
+            file = open(f"{path}\\{category}\\{file_name}", "r")
+            data = file.read()
+            components = data.split(";\n")
+
+            db_category = category_table.query.filter_by(name=file_name[0:-4]).first()
+
+            for component in components[0:quantity]:
+                product = eval(component)
+                product_attributes = list(product.keys())
+                if "Brand" not in product_attributes:
+                    continue
+
+                db_brand = brand_table.query.filter_by(brand_name=product["Brand"]).first()
+
+                if not db_brand or not db_category:
+                    continue
+
+                price = price_generator(product["price"], price_table)
+
+                if not price:
+                    continue
+
+                db_product = product_table(price_id=price.id, brand_id=db_brand.id, category_id=db_category.id,
+                                           name=product["name"], quantity=random.randint(10, 30),
+                                           score=random.randint(70, 100) / 10)
+                db_product.create()
+                db_product.save()
+
+                product_attributes.remove('price')
+                product_attributes.remove('Brand')
+                product_attributes.remove('name')
+
+                for attribute in product_attributes:
+                    if "img" not in attribute:
+                        db_attribute = attribute_table.query.filter_by(category_id=db_category.id,
+                                                                       name=attribute).first()
+
+                        db_product_attribute = product_attribute_table(product_id=db_product.id,
+                                                                       attribute_id=db_attribute.id,
+                                                                       value=product[attribute])
+                        db_product_attribute.create()
+                        db_product_attribute.save()
+
+                data = img_generator(product_attributes)
+
+                for attribute in ["online_img", "img"]:
+                    db_attribute = attribute_table.query.filter_by(category_id=db_category.id,
+                                                                   name=attribute).first()
+
+                    db_product_attribute = product_attribute_table(product_id=db_product.id,
+                                                                   attribute_id=db_attribute.id,
+                                                                   value=str(data[attribute]))
+                    db_product_attribute.create()
+                    db_product_attribute.save()
 
 
 @click.command("test")
 @with_appcontext
 def test():
-    print("True")
+    click.echo("does not work")
 
 
 @click.command("init_db")
@@ -184,9 +323,11 @@ def populate_test_db():
 
     create_roles_table(Role)
     create_country_table(Country)
-    create_users_table([0, 7], User, UserRole, Card, Address)
+    create_users_table(User, UserRole, Card, Address, quantity=7)
     create_category_table(Category)
     create_attribute_table(Attribute, Category)
+    create_brand_table(Brand)
+    create_product_table(Product, Category, Attribute, Brand, Price, ProductAttribute, quantity=3)
     click.echo("Done all")
 
 
@@ -197,8 +338,9 @@ def populate_db():
 
     create_roles_table(Role)
     create_country_table(Country)
-    create_users_table([0, -1], User, UserRole, Card, Address)
+    create_users_table(User, UserRole, Card, Address)
     create_category_table(Category)
     create_attribute_table(Attribute, Category)
-
+    create_brand_table(Brand)
+    create_product_table(Product, Category, Attribute, Brand, Price, ProductAttribute)
     click.echo("Done all")

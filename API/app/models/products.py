@@ -57,9 +57,9 @@ class Price(BaseModel):
     selling_price = db.Column(db.Integer)
     sale_price = db.Column(db.Integer)
     margin = db.Column(db.Integer)
-    sale = db.Column(db.Boolean)
-    sale_start_date = db.Column(db.Date)
-    sale_end_date = db.Column(db.Date)
+    sale = db.Column(db.Boolean, default=False)
+    sale_start_date = db.Column(db.TEXT)
+    sale_end_date = db.Column(db.TEXT)
 
 
 class Brand(BaseModel):

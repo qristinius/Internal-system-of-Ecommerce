@@ -61,7 +61,6 @@ for category in dir_list:
         categories.append(category)
         files[category] = dir_list
 
-
 attributes_file = open(f'Data/attributes.txt', 'w')
 attributes_file_data = {}
 category_file = open(f'Data/category.txt', 'w')
@@ -79,12 +78,8 @@ for category in categories:
         file = open(f"{path}\\{category}\\{file_name}", "r")
         create_filtered_data(file, new_attributes, category, file_name)
 
-
 attributes_file.write(json.dumps(attributes_file_data))
 attributes_file.close()
 
 category_file.write(json.dumps(category_file_data))
 category_file.close()
-
-
-
