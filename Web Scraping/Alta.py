@@ -103,6 +103,7 @@ def miner(links, category):
 # miner(links_for_pc_components[1:], links_for_pc_components[0])
 # miner(links_for_monitors_projectors[1:], links_for_monitors_projectors[0])
 # miner(links_for_tablets_accessories[1:], links_for_tablets_accessories[0])
+# miner(links_for_networking[1:], links_for_networking[0])
 # miner(links_for_computer_accessories[1:], links_for_computer_accessories[0])
 # miner(links_for_printers_scanners_supplies[1:], links_for_printers_scanners_supplies[0])
 # miner(links_for_notebooks_accessories[1:], links_for_notebooks_accessories[0])

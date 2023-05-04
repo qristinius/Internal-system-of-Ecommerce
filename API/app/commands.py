@@ -2,7 +2,7 @@ from flask.cli import with_appcontext
 from app.extensions import db
 from datetime import datetime
 import json
-from app.models import Role, User, UserRole, Address, Country, Card
+from app.models import Role, User, UserRole, Address, Country, Card, Category, Attribute
 import click
 
 
@@ -39,7 +39,7 @@ def create_country_table(country_class):
         country.save()
 
 
-# populating User, Card, Address tables
+# populating User, Card, Address table
 def create_users_table(size, user_class, user_role_class, card_class, address_class):
     click.echo("populating: user, address and card tables \n")
     file = open('Data/Users.txt', 'r')
@@ -104,6 +104,70 @@ def create_users_table(size, user_class, user_role_class, card_class, address_cl
             continue
 
 
+# populating category table
+def create_category_table(category_table):
+    click.echo("populating category table \n")
+
+    file = open('Data/Category.txt', 'r')
+    content = json.loads(file.read())
+    main_category = list(content.keys())
+
+    for main_category_name in main_category:
+        main_category_data = (content[main_category_name])
+
+        main = category_table(name=main_category_name)
+        main.create()
+        main.save()
+
+        if dict == type(main_category_data):
+            secondary_categories = list(main_category_data.keys())
+
+            for second_category_name in secondary_categories:
+                third_categories = main_category_data[second_category_name]
+
+                secondary = category_table(name=second_category_name, parent_id=main.id)
+                secondary.create()
+                secondary.save()
+
+                for third_category_name in third_categories:
+                    # main_category_name
+                    # second_category_name
+                    # third_category_name
+
+                    third = category_table(name=third_category_name, parent_id=secondary.id)
+                    third.create()
+                    third.save()
+        else:
+
+            for second_category_name in main_category_data:
+                secondary = category_table(name=second_category_name, parent_id=main.id)
+                secondary.create()
+                secondary.save()
+
+
+# populating Attribute tables
+def create_attribute_table(attribute_table, category_table):
+    click.echo("populating Attribute table \n")
+
+    file = open('Data/Attributes.txt', 'r')
+    content = json.loads(file.read())
+    category_names = list(content.keys())
+
+    for category_name in category_names:
+        category = category_table.query.filter_by(name=category_name).first()
+        attributes = content[category_name]
+        for attribute in attributes:
+            main = attribute_table(name=attribute, category_id=category.id)
+            main.create()
+            main.save()
+
+
+@click.command("test")
+@with_appcontext
+def test():
+    print("True")
+
+
 @click.command("init_db")
 @with_appcontext
 def init_db():
@@ -121,7 +185,8 @@ def populate_test_db():
     create_roles_table(Role)
     create_country_table(Country)
     create_users_table([0, 7], User, UserRole, Card, Address)
-
+    create_category_table(Category)
+    create_attribute_table(Attribute, Category)
     click.echo("Done all")
 
 
@@ -133,5 +198,7 @@ def populate_db():
     create_roles_table(Role)
     create_country_table(Country)
     create_users_table([0, -1], User, UserRole, Card, Address)
+    create_category_table(Category)
+    create_attribute_table(Attribute, Category)
 
     click.echo("Done all")
