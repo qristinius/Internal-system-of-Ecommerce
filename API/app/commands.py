@@ -13,7 +13,7 @@ from app.models import Role, User, UserRole, Address, Country, Card, Category, A
 def create_roles_table(role_class):
     click.echo("Populating roles table \n")
 
-    role = role_class(name="Admin", can_create_role=True, can_send_message=True)
+    role = role_class(name="Admin", can_create_role=True, can_send_message=True, can_modify_employee_profile = True)
     role.create()
     role = role_class(name="Category Manager", can_create_product=True, can_create_sales=True, can_see_stats=True,
                       can_send_message=True)
@@ -327,7 +327,7 @@ def populate_test_db():
     create_category_table(Category)
     create_attribute_table(Attribute, Category)
     create_brand_table(Brand)
-    create_product_table(Product, Category, Attribute, Brand, Price, ProductAttribute, quantity=3)
+    create_product_table(Product, Category, Attribute, Brand, Price, ProductAttribute, quantity=1)
     click.echo("Done all")
 
 

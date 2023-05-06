@@ -29,7 +29,7 @@ class ProductComment(BaseModel):
     comment = db.Column(db.Text)
     picture_path = db.Column(db.String)  # this is photopath
 
-    comment = db.relationship("Product", backref="comments")
+    comments = db.relationship("Product", backref="comments")
 
 
 class Product(BaseModel):
