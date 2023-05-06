@@ -1,7 +1,7 @@
 import os, time
 import json
 
-path = f"{os.getcwd()}\\Alta Data"
+path = f"{os.getcwd()}\\Alta Data\\Products"
 dir_list = os.listdir(path)
 
 files = {}
@@ -61,12 +61,14 @@ for category in dir_list:
         categories.append(category)
         files[category] = dir_list
 
-
 attributes_file = open(f'Data/attributes.txt', 'w')
 attributes_file_data = {}
+category_file = open(f'Data/category.txt', 'w')
+category_file_data = {}
 
 for category in categories:
     file_names = files[category]
+    category_file_data[category] = [i[0:-4] for i in file_names]
 
     for file_name in file_names:
         file = open(f"{path}\\{category}\\{file_name}", "r")
@@ -76,8 +78,8 @@ for category in categories:
         file = open(f"{path}\\{category}\\{file_name}", "r")
         create_filtered_data(file, new_attributes, category, file_name)
 
-
 attributes_file.write(json.dumps(attributes_file_data))
 attributes_file.close()
 
-
+category_file.write(json.dumps(category_file_data))
+category_file.close()
