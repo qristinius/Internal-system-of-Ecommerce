@@ -132,3 +132,8 @@ dmypy.json
 
 # sqlite Database 
 db.sqlite
+
+# data from web scraping
+Web Scraping/Alta Data/Products
+Web Scraping/Alta Data/Photos
+Web Scraping/Data/Photos

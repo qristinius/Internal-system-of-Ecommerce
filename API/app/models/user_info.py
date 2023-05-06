@@ -18,7 +18,6 @@ class Address(BaseModel):
     building_address = db.Column(db.String, nullable=False)
     zip_code = db.Column(db.String, nullable=False)
     deleted = db.Column(db.Boolean, default=False)
-    used = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", backref="address")
     purchase = db.relationship("Purchase", backref="purchase_address")
@@ -40,9 +39,9 @@ class Card(BaseModel):
 
     _card_number = db.Column("card_number", db.String, nullable=False)
     holder_name = db.Column(db.String, nullable=False)
-    usable = db.Column(db.Boolean, default=True)
     expiration_date = db.Column(db.TEXT, nullable=False)
-    # აქ დასამატებელი იქნება რომელი ბარათია და რა ტიპისაა
+    brand = db.Column(db.String)  #ამას nullable ´false უნდა დაეწეროს მას მერე რაც დათა შეიცვლება 
+    usable = db.Column(db.Boolean, default=True)
     deleted = db.Column(db.Boolean, default=False)
     user = db.relationship("User", backref="cards")
 

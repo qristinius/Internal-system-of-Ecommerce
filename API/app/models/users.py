@@ -46,11 +46,19 @@ class Role(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+
     can_create_role = db.Column(db.Boolean, default=False)
+    can_modify_employee_profile = db.Column(db.Boolean, default=False)
+    can_send_message = db.Column(db.Boolean, default=False)
+
     can_create_product = db.Column(db.Boolean, default=False)
     can_create_sales = db.Column(db.Boolean, default=False)
+    can_see_stats = db.Column(db.Boolean, default=False)
+
     can_deliver_items = db.Column(db.Boolean, default=False)
-    can_send_message = db.Column(db.Boolean, default=False)
-    can_create_address = db.Column(db.Boolean, default=False)
-    can_create_card = db.Column(db.Boolean, default=False)
+    can_modify_profile = db.Column(db.Boolean, default=False)
+    can_write_comment = db.Column(db.Boolean, default=False)
+    can_rate_product = db.Column(db.Boolean, default=False)
+    can_buy_product = db.Column(db.Boolean, default=False)
+
     user = db.relationship("User", secondary="user_roles", backref="role")
