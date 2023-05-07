@@ -50,7 +50,7 @@ def user_populate_data(names, lastname):
         user = {
             "full_name": user_name,
             "email": modify_mail(user_email),
-            "role_id": 4,
+            "role_id": 5,
             "password": "password",
             "registration_date": datetime(random.randint(2019, 2022), random.randint(1, 12),
                                           random.randint(1, 26), random.randint(1, 12),

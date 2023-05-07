@@ -24,7 +24,7 @@ class CardsApi(Resource):
 
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_card"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         # if not bank_accept:
@@ -54,7 +54,7 @@ class CardsApi(Resource):
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_card"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         data = []
@@ -83,7 +83,7 @@ class CardsApi(Resource):
 
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_card"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         for card in user.cards:

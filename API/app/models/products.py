@@ -9,6 +9,7 @@ class Cart(BaseModel):
 
     user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+    quantity = db.Column(db.Integer)
 
 
 class PurchaseProduct(BaseModel):
@@ -26,10 +27,10 @@ class ProductComment(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
 
-    comment = db.Column(db.Text)
+    comment = db.Column(db.String)
     picture_path = db.Column(db.String)  # this is photopath
 
-    comment = db.relationship("Product", backref="comments")
+    comments = db.relationship("Product", backref="comments")
 
 
 class Product(BaseModel):
@@ -60,6 +61,11 @@ class Price(BaseModel):
     sale = db.Column(db.Boolean, default=False)
     sale_start_date = db.Column(db.TEXT)
     sale_end_date = db.Column(db.TEXT)
+
+    def get_price(self):
+        if self.sale:
+            return self.sale_price
+        return self.selling_price
 
 
 class Brand(BaseModel):

@@ -26,7 +26,7 @@ class AddressApi(Resource):
 
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_address"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         address = Address(user_id=user.id,
@@ -49,20 +49,21 @@ class AddressApi(Resource):
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_address"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         if not user.address:
-            return "Bad request", 400
+            return [], 200
 
         data = []
         for address in user.address:
             if not address.deleted:
+                country = Country.query.filter_by(id=address.country_id).first()
                 user_address = {
                     "address_id": address.id,
                     "full_name": address.full_name,
                     "mobile_number": address.mobile_number,
-                    "country_id": address.country_id,
+                    "country": country.name,
                     "city": address.city,
                     "state_province_region": address.state_province_region,
                     "building_address": address.building_address,
@@ -80,7 +81,7 @@ class AddressApi(Resource):
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_address"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         result = Address.query.filter_by(id=args["address_id"]).first()
@@ -108,7 +109,7 @@ class AddressApi(Resource):
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 
-        if not user.check_permission("can_create_address"):
+        if not user.check_permission("can_modify_profile"):
             return "Bad request", 400
 
         result = Address.query.filter_by(id=args["address_id"]).first()
