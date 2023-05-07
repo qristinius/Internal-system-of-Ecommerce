@@ -32,6 +32,13 @@ class ProductComment(BaseModel):
 
     comments = db.relationship("Product", backref="comments")
 
+class Score(BaseModel):
+    __tablename__ = "scores"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+    score = db.Column(db.Float)
 
 class Product(BaseModel):
     __tablename__ = "products"
@@ -43,7 +50,6 @@ class Product(BaseModel):
 
     name = db.Column(db.String)
     quantity = db.Column(db.Integer)
-    score = db.Column(db.Float)
 
     user = db.relationship("User", secondary="cart", backref="product_cart")
     
