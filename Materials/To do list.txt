@@ -1,10 +1,10 @@
 API:
 
-1) ✔️	 authentication
+1) ✔️ authentication
 2) ✔️ address  	
 3) product
-4) ✔️card		
-5) cart
+4) ✔️ card
+5) ✔️ cart
 6) purchase
 7) product score
 8) product comment
@@ -14,27 +14,3 @@ API:
 12)data analyze
 13) create roles
 14) password recovery	(მეილს შეიყვანს იუზერი ჩვენ ამ მეილზე გავაგზავნით ნოთიფიქეიშენს და გადავიყვანთ ახალ ლინკზე სადაც შეიყვანს ახალ პაროლს)
-
-
-
-
-Roles:
-
-+role (online consultant)
-
-
-
-Permissions:
-
-can_create_address
-can_create_card
-can_create_product
-can_create_comment
-can_create_score
-can_create_messages
-can_see_data_analyze
-can_create_role
-can_create_sales
-can_delivery_product
-can_start_chat
-can_responses_chat

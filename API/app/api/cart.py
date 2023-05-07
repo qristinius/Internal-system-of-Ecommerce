@@ -19,7 +19,7 @@ class CartsApi(Resource):
         user = User.query.filter_by(email=current_user).first()
         product = Product.query.filter_by(id=args["product_id"]).first()
 
-        if not product or product.quantity == 0:
+        if not product:
             return "Bad request", 400
 
         if not user.check_permission("can_buy_product"):
