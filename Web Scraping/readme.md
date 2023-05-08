@@ -18,8 +18,8 @@ ___
 4. Run **Data Transformation.py** file from idle. (To transform data)
 
 ___
-# <center>**Contents**</center>
-## **Folders:**
+# <center>**Contents** :open_book:</center>
+## **Folders:** :file_folder:
 - Alta Data
 - Data
 
