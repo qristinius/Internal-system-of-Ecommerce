@@ -1,4 +1,4 @@
-# <center>**Data Scraping from Alta’s website**</center>
+# <h1 align="center">**Data Scraping from Alta’s website**</h1>
 ## :heavy_exclamation_mark: You need to be inside of the **“Web Scrapping”** folder to run codes. :heavy_exclamation_mark::open_file_folder:
 ### This is documentation for data scrapping from online retailer Alta. The project’s aim is to collect data from the website that was mentioned above. 
 ## **Used technologies:** :microscope:
@@ -9,16 +9,19 @@
 + **Pillow**
 ___
 ### If you want to see exact versions of used technologies check **requirements.txt** file.
-# <center>**Launch**</center>
+# <h1 align="center">**Launch**</h1>
 ## To launch project **Python should be installed** in your system
 ## **Stages of launching:**
 1. Open project in your code editor
-2. Open the terminal and install requirements.txt with command “pip install –r requirements.txt”  
+2. Open the terminal and install requirements.txt with command:
+
+        pip install –r requirements.txt
+
 3. Run **Alta.py** file from idle. (to collect data) 
 4. Run **Data Transformation.py** file from idle. (To transform data)
 
 ___
-# <center>**Contents** :open_book:</center>
+# <h1 align="center" style="color:blue">**Contents** :open_book:</h1>
 ## **Folders:** :file_folder:
 - Alta Data
 - Data
