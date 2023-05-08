@@ -9,6 +9,8 @@ from app.functions_for_commands import *
 @with_appcontext
 def test():
     click.echo("magari var")
+    create_purchase_table(Purchase, User, Product,5)
+
 
 
 @click.command("init_db")
