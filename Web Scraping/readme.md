@@ -1,6 +1,5 @@
 # <center>**Data Scraping from Alta’s website**</center>
 ## You need to be inside of the **“Web Scrapping”** folder to run codes. :open_file_folder:
-___
 ### This is documentation for data scrapping from online retailer Alta. The project’s aim is to collect data from the website that was mentioned above. 
 ## **Used technologies:** :microscope:
 + **Python**
@@ -15,4 +14,5 @@ ___
 ___
 ## **Stages of launching:**
 1. Open project in your code editor
-2. Open the terminal and install requirements.txt with command copyCodeBlock('<div>pip install –r requirements.txt</div>') 
+2. Open the terminal and install requirements.txt with command “pip install –r requirements.txt”  
+3. Run <string stle="color:red;">**Alta.py**</string> file from idle. (to collect data) 
