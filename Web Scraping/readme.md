@@ -1,4 +1,4 @@
-# <h1 align="center">**Data Scraping from Alta’s website** :computer:</h1>
+# <h1 >**Data Scraping from Alta’s website** :computer:</h1>
 ## :heavy_exclamation_mark: You need to be inside of the _**“Web Scrapping”**_ folder to run codes.:open_file_folder:
 ### :green_book: This is documentation for data scrapping from online retailer Alta. The project’s aim is to collect data from the website that was mentioned above. 
 ## :microscope: **Used technologies:** 
