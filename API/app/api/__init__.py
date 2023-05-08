@@ -13,4 +13,3 @@ api.add_resource(CardsApi, "/Cards")
 api.add_resource(ForgotPasswordApi, "/ForgotPassword")
 api.add_resource(ResetPasswordApi, "/ResetPassword")
 api.add_resource(ProductCommentApi,"/ProductComment")
-

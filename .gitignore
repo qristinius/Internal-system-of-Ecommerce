@@ -132,6 +132,7 @@ dmypy.json
 
 # sqlite Database 
 db.sqlite
+API/migrations
 
 # data from web scraping
 Web Scraping/Alta Data/Products

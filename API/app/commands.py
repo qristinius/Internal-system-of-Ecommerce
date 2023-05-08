@@ -268,8 +268,8 @@ def create_product_table(product_table, category_table, attribute_table, brand_t
                     continue
 
                 db_product = product_table(price_id=price.id, brand_id=db_brand.id, category_id=db_category.id,
-                                           name=product["name"], quantity=random.randint(10, 30),
-                                           score=random.randint(70, 100) / 10)
+                                           name=product["name"], quantity=random.randint(10, 30)
+                                           ) #score=random.randint(70, 100) / 10
                 db_product.create()
                 db_product.save()
 
