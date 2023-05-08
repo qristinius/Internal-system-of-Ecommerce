@@ -293,3 +293,29 @@ def create_product_table(product_table, category_table, attribute_table, brand_t
                     db_product_attribute.create()
                     db_product_attribute.save()
 
+
+#populating purchase table 
+def create_purchase_table(purchase_table, user_table, product_table, quantity):
+    users = user_table.query.all()
+    products = product_table.query.all()
+    counter = 0
+    while counter < quantity:
+        user = random.choice(users)
+        user_role = user.role[0]
+        if user_role.name != "User":
+            continue
+        counter +=1 
+        product = random.choice(products)
+        address = random.choice(user.address)
+        price = product.price.selling_price
+        
+        purchase = purchase_table(user_id=user.id, 
+                                  address_id=address.id,
+                                  product_id=product.id,
+                                  product_quantity=1,
+                                  user_price=price,
+                                  purchase_date=datetime.datetime.today(),
+                                  )
+        purchase.create()
+        purchase.save()
+

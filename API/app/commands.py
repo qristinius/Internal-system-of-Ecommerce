@@ -2,13 +2,13 @@ from flask.cli import with_appcontext
 from app.extensions import db
 import click
 from app.models import Role, User, UserRole, Address, Country, Card, Category, Attribute, Brand, Product, Price, \
-    ProductAttribute
+    ProductAttribute, Purchase
 from app.functions_for_commands import *
 
 @click.command("test")
 @with_appcontext
 def test():
-    click.echo("does not work")
+    click.echo("magari var")
 
 
 @click.command("init_db")
@@ -32,6 +32,9 @@ def populate_test_db():
     create_attribute_table(Attribute, Category)
     create_brand_table(Brand)
     create_product_table(Product, Category, Attribute, Brand, Price, ProductAttribute, quantity=3)
+    create_purchase_table(Purchase, User, Product,5)
+    
+
     click.echo("Done all")
 
 
@@ -47,4 +50,6 @@ def populate_db():
     create_attribute_table(Attribute, Category)
     create_brand_table(Brand)
     create_product_table(Product, Category, Attribute, Brand, Price, ProductAttribute)
+    create_purchase_table(Purchase, User, Product,3e4)
     click.echo("Done all")
+
