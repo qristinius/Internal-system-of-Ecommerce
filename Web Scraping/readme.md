@@ -30,7 +30,7 @@ ___
 - Links.py
 ___
 
-1. Functions in **“Alta.py”** collects data from [Alta’s website]((https://alta.ge/?sl=ge)). 
+1. Functions in **“Alta.py”** collects data from [Alta’s website](https://alta.ge/?sl=ge). 
 2. Functions in **“Data Transformation.py”** transforms the data as it is suitable for project.
 3. In **“Links.py”** there are links saved that the data is collected from.
 
