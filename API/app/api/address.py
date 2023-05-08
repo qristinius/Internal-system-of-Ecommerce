@@ -46,6 +46,7 @@ class AddressApi(Resource):
 
     @jwt_required()
     def get(self):
+        
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
 
