@@ -9,7 +9,7 @@ class Purchase(BaseModel):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     address_id = db.Column(db.Integer, db.ForeignKey("user_addresses.id"))
 
-    product_quantity_ = db.Column(db.Integer)
+    product_quantity_ = db.Column(db.Integer) #qveda tire washale 
     user_price = db.Column(db.Integer)
     comment = db.Column(db.String)
     status = db.Column(db.String)
