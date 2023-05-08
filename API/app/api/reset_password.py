@@ -14,13 +14,18 @@ class ForgotPasswordApi(Resource):
     def post(self):
         parser = self.parser.parse_args()
         user = User.query.filter_by(email = parser["email"]).first()
-        if user:
-            user.reset_password = True
-            reset_key = create_key(parser["email"])
-            html = render_template("auth/_reset_message.html", key=reset_key)
-            send_email(subject ="reset your password", html=html, recipients=parser["email"])
-            return "Success", 200
-        return "Invalid mail"
+        if not user:
+            return "Bad Request", 400 
+        if not user.check_permission("can_modify_profile"):
+            return "Bad Request", 400
+        
+        
+        user.reset_password = True
+        reset_key = create_key(parser["email"])
+        html = render_template("auth/_reset_message.html", key=reset_key)
+        send_email(subject ="reset your password", html=html, recipients=parser["email"])
+        return "Success", 200
+        
     
 
 class ResetPasswordApi(Resource):
