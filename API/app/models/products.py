@@ -12,14 +12,6 @@ class Cart(BaseModel):
     quantity = db.Column(db.Integer)
 
 
-class PurchaseProduct(BaseModel):
-    __tablename__ = "product_and_purchase"
-
-    id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
-    purchase_id = db.Column(db.Integer, db.ForeignKey("purchases.id"))
-
-
 class ProductComment(BaseModel):
     __tablename__ = "product_comments"
 
@@ -29,8 +21,10 @@ class ProductComment(BaseModel):
 
     comment = db.Column(db.String)
     picture_path = db.Column(db.String)  # this is photopath
+    comment_date = db.Column(db.Text)
 
     comments = db.relationship("Product", backref="comments")
+    
 
 class Score(BaseModel):
     __tablename__ = "scores"
