@@ -20,8 +20,9 @@ ___
 3. Run **Alta.py** file from idle. (to collect data) 
 4. Run **Data Transformation.py** file from idle. (To transform data)
 
-___
 # <h1 align="center" style="color:blue">**Contents** :open_book:</h1>
+<span style="color:blue">some *blue* text</span>.
+
 ## **Folders:** :file_folder:
 - Alta Data
 - Data
