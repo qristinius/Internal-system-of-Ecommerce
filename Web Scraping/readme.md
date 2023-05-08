@@ -8,7 +8,7 @@
 + **lxml**
 + **Pillow**
 ___
-### :page_facing_up: If you want to see exact versions of used technologies check **requirements.txt** file.
+### :page_facing_up: If you want to see exact versions of used technologies check _**requirements.txt**_ file.
 # <h1 align="center">:rocket:  **Launch** </h1>
 ## :heavy_exclamation_mark: To launch project _**Python should be installed**_ in your system
 ## :roller_coaster: **Stages of launching:**
