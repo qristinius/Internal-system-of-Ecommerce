@@ -11,14 +11,6 @@ class Cart(BaseModel):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
 
 
-class PurchaseProduct(BaseModel):
-    __tablename__ = "product_and_purchase"
-
-    id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
-    purchase_id = db.Column(db.Integer, db.ForeignKey("purchases.id"))
-
-
 class ProductComment(BaseModel):
     __tablename__ = "product_comments"
 

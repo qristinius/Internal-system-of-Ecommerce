@@ -20,9 +20,9 @@ class ProductCommentApi(Resource):
         current_user = get_jwt_identity()
 
         user = User.query.filter_by(email=current_user).first()
-        user_purchase = Purchase.query.filter_by(user_id = user.id).first()
+        permission = Purchase.query.filter_by(user_id = user.id, product_id=parser["product_id"]).first()
 
-        if not user_purchase:
+        if not permission:
             return "Bad Request", 400
         
         
@@ -30,7 +30,7 @@ class ProductCommentApi(Resource):
                                 product_id = parser["product_id"],
                                 comment = parser["comment"],
                                 picture_path = parser["picture_path"],
-                                comment_date = parser["comment_date"]
+                                comment_date = parser["comment_date"]  
                                 )
         comment.create()
         comment.save()
