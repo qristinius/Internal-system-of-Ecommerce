@@ -44,27 +44,51 @@ class ProductCommentApi(Resource):
     def put(self):
         self.parser.add_argument("comment_id", required=True, type=str)
         
-        parser=self.parser.parse_args()
+        args=self.parser.parse_args()
         current_user = get_jwt_identity()
 
         user = User.query.filter_by(email=current_user).first()
-        user_purchase = Purchase.query.filter_by(user_id = user.id).first()
-
+        user_purchase = Purchase.query.filter_by(user_id = user.id, product_id=args["product_id"]).first()
+        
         if not user_purchase:
             return "Bad Request", 400
         
-        selected_comment = ProductComment.query.filter_by(id=parser["comment_id"])
+        selected_comment = ProductComment.query.filter_by(id=args["comment_id"]).first()
+        
 
         if not selected_comment:
             return "Bad Request", 400
         
-        selected_comment.product_id = parser["product_id"]
-        selected_comment.comment = parser["comment"]
-        selected_comment.picture_path = parser["picture_path"]
-        selected_comment.comment_date = parser["comment_date"]
+        selected_comment.product_id = args["product_id"]
+        selected_comment.comment = args["comment"]
+        selected_comment.picture_path = args["picture_path"]
+        selected_comment.comment_date = args["comment_date"]
         selected_comment.save()
+        
+    
 
         return "success", 200
+    
+
+    @jwt_required()
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("comment_id", required=True, type=int)
+        
+        args = parser.parse_args()
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+
+        
+
+        result = ProductComment.query.filter_by(id=args["comment_id"]).first()
+
+        if not result:
+            return "Bad request", 400
+
+        result.delete()
+        result.save()
+        return "Success", 200
     
 
     
