@@ -5,7 +5,7 @@ class Purchase(BaseModel):
     __tablename__ = "purchases"
 
     id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
+    c = db.Column(db.Integer, db.ForeignKey("registered_users.id"))
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     address_id = db.Column(db.Integer, db.ForeignKey("user_addresses.id"))
 
