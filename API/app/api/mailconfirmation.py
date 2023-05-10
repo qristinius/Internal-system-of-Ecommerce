@@ -11,6 +11,12 @@ class ReceiveKeyApi(Resource):
     def post(self):
         parser = self.parser.parse_args()
         user = User.query.filter_by(email=parser["email"]).first()
+
+        if not user:
+            return "Bad Request", 400 
+        if not user.check_permission("can_modify_profile"):
+            return "Bad Request", 400
+        
         if user and not user.confirmation:
             key = create_key(parser["email"])
             html = render_template('auth/_activation_massage.html', key=key)
