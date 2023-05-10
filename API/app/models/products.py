@@ -24,7 +24,6 @@ class ProductComment(BaseModel):
     comment_date = db.Column(db.Text)
 
     comments = db.relationship("Product", backref="comments")
-    
 
 
 class Score(BaseModel):
