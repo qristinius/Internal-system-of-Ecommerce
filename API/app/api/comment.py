@@ -81,13 +81,13 @@ class ProductCommentApi(Resource):
 
         
 
-        result = ProductComment.query.filter_by(id=args["comment_id"]).first()
+        selected_comment = ProductComment.query.filter_by(id=args["comment_id"]).first()
 
-        if not result:
+        if not selected_comment:
             return "Bad request", 400
 
-        result.delete()
-        result.save()
+        selected_comment.delete()
+        selected_comment.save()
         return "Success", 200
     
 
