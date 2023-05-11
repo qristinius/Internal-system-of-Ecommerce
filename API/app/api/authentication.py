@@ -35,7 +35,7 @@ class RegistrationApi(Resource):
         user_role.save()
 
         key = create_key(modify_mail(args["email"]))
-        html = render_template('_activation_massage.html', key=key)
+        html = render_template('auth/_activation_massage.html', key=key)
 
         send_email(subject="Confirm your account", html=html, recipients=args["email"])
 
