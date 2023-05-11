@@ -46,10 +46,9 @@ class ProductCommentApi(Resource):
         current_user = get_jwt_identity()
 
         user = User.query.filter_by(email=current_user).first()
-        user_purchase = Purchase.query.filter_by(user_id=user.id, product_id=args["product_id"]).first()
 
-        if not user_purchase:
-            return "Bad Request", 400
+        if not user.check_permission("can_buy_product"):
+            return "Bad request", 400
 
         selected_comment = ProductComment.query.filter_by(id=args["comment_id"]).first()
 
@@ -72,6 +71,9 @@ class ProductCommentApi(Resource):
         args = parser.parse_args()
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
+
+        if not user.check_permission("can_buy_product"):
+            return "Bad request", 400
 
         result = ProductComment.query.filter_by(id=args["comment_id"]).first()
 

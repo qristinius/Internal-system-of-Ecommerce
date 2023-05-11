@@ -14,8 +14,7 @@ def create_roles_table(role_class):
     role.create()
     role = role_class(name="Delivery", can_deliver_items=True, can_send_message=True)
     role.create()
-    role = role_class(name="User", can_modify_profile=True, can_write_comment=True, can_rate_product=True,
-                      can_buy_product=True)
+    role = role_class(name="User", can_modify_profile=True, can_buy_product=True)
     role.create()
     role.save()
 

@@ -57,8 +57,6 @@ class Role(BaseModel):
 
     can_deliver_items = db.Column(db.Boolean, default=False)
     can_modify_profile = db.Column(db.Boolean, default=False)
-    can_write_comment = db.Column(db.Boolean, default=False)
-    can_rate_product = db.Column(db.Boolean, default=False)
     can_buy_product = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", secondary="user_roles", backref="role")
