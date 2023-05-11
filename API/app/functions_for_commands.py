@@ -1,6 +1,5 @@
 import datetime, click, random, json, os
 
-# global functions
 
 # populating roles table
 def create_roles_table(role_class):
@@ -15,8 +14,7 @@ def create_roles_table(role_class):
     role.create()
     role = role_class(name="Delivery", can_deliver_items=True, can_send_message=True)
     role.create()
-    role = role_class(name="User", can_modify_profile=True, can_write_comment=True, can_rate_product=True,
-                      can_buy_product=True)
+    role = role_class(name="User", can_modify_profile=True, can_buy_product=True)
     role.create()
     role.save()
 
@@ -262,7 +260,7 @@ def create_product_table(product_table, category_table, attribute_table, brand_t
 
                 db_product = product_table(price_id=price.id, brand_id=db_brand.id, category_id=db_category.id,
                                            name=product["name"], quantity=random.randint(10, 30)
-                                           ) #score=random.randint(70, 100) / 10
+                                           )  # score=random.randint(70, 100) / 10
                 db_product.create()
                 db_product.save()
 
@@ -294,7 +292,7 @@ def create_product_table(product_table, category_table, attribute_table, brand_t
                     db_product_attribute.save()
 
 
-#populating purchase table 
+# populating purchase table
 def create_purchase_table(purchase_table, user_table, product_table, quantity):
     users = user_table.query.all()
     products = product_table.query.all()
@@ -304,12 +302,12 @@ def create_purchase_table(purchase_table, user_table, product_table, quantity):
         user_role = user.role[0]
         if user_role.name != "User":
             continue
-        counter +=1 
+        counter += 1
         product = random.choice(products)
         address = random.choice(user.address)
         price = product.price.selling_price
-        
-        purchase = purchase_table(user_id=user.id, 
+
+        purchase = purchase_table(user_id=user.id,
                                   address_id=address.id,
                                   product_id=product.id,
                                   product_quantity=1,
@@ -318,4 +316,3 @@ def create_purchase_table(purchase_table, user_table, product_table, quantity):
                                   )
         purchase.create()
         purchase.save()
-
