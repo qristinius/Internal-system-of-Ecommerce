@@ -73,5 +73,52 @@ class PurchaseApi(Resource):
 
         return data, 200
 
+    @jwt_required()
+    def put(self):
+        self.parser.add_argument("purchase_id", required=True, type=int)
+        args = self.parser.parse_args()
 
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+
+        if not user.check_permission("can_buy_product"):
+            return "Bad request", 400 
+        
+        user_purchase = Purchase.query.filter_by(id = args["purchase_id"]).first()
+
+        if not user_purchase:
+            return "Bad request", 400
+        
+        user_purchase.product_id =args["product_id"],
+        user_purchase.address_id = args["address_id"],
+        user_purchase.product_quantity = args["product_quantity"],
+        user_purchase.user_price = args["user_price"],
+        user_purchase.comment = args["comment"],
+        user_purchase.status = args["status"],  
+        user_purchase.purchase_date = args["purchase_date"],
+        user_purchase.delivery_date = args["delivery_date"]
+
+        user_purchase.save()
+
+        return "Success", 200
+    
+    @jwt_required
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("purchase_id", required=True, type=int)
+        
+        args = parser.parse_args()
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+
+        result = Purchase.query.filter_by(id=args["purchase_id"]).first()
+
+        if not result:
+            return "Bad request", 400
+
+        result.delete()
+        result.save()
+        return "Success", 200
+
+        
 
