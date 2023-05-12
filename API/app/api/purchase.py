@@ -8,14 +8,10 @@ class PurchaseApi(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument("product_id", required=True, type=int)
     parser.add_argument("address_id", required=True, type=int)
-
     parser.add_argument("product_quantity", required=True, type=int)
-    parser.add_argument("user_price", required=True, type=int)
     parser.add_argument("comment", required=False, type=str)
-    parser.add_argument("status", required=False, type=str)
-
     parser.add_argument("purchase_date", required=True, type=inputs.datetime_from_iso8601)
-    parser.add_argument("delivery_date", required=False, type=inputs.datetime_from_iso8601)
+
 
     @jwt_required()
     def post(self):

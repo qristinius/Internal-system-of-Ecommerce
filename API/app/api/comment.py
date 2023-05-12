@@ -22,9 +22,9 @@ class ProductCommentApi(Resource):
         if not user.check_permission("can_buy_product"):
             return "Bad request", 400
 
-        permission = Purchase.query.filter_by(user_id=user.id, product_id=args["product_id"]).first()
+        user_purchase = Purchase.query.filter_by(user_id=user.id, product_id=args["product_id"]).first()
 
-        if not permission:
+        if not user_purchase:
             return "Bad Request", 400
 
         comment = ProductComment(user_id=user.id,
@@ -40,8 +40,6 @@ class ProductCommentApi(Resource):
 
     @jwt_required()
     def put(self):
-        self.parser.add_argument("comment_id", required=True, type=str)
-
         args = self.parser.parse_args()
         current_user = get_jwt_identity()
 
@@ -50,7 +48,8 @@ class ProductCommentApi(Resource):
         if not user.check_permission("can_buy_product"):
             return "Bad request", 400
 
-        selected_comment = ProductComment.query.filter_by(id=args["comment_id"]).first()
+        selected_comment = ProductComment.query.filter_by(user_id=user.id, product_id=args["product_id"], comment_date=str(args["comment_date"])).first()
+    
 
         if not selected_comment:
             return "Bad Request", 400
@@ -63,10 +62,12 @@ class ProductCommentApi(Resource):
 
         return "success", 200
 
-    @jwt_required()
+    @jwt_required() 
     def delete(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("comment_id", required=True, type=int)
+        parser.add_argument("product_id", required=True, type=int)
+        parser.add_argument("comment_date", required=True, type=inputs.datetime_from_iso8601)
+
 
         args = parser.parse_args()
         current_user = get_jwt_identity()
@@ -75,11 +76,12 @@ class ProductCommentApi(Resource):
         if not user.check_permission("can_buy_product"):
             return "Bad request", 400
 
-        result = ProductComment.query.filter_by(id=args["comment_id"]).first()
+        selected_comment = ProductComment.query.filter_by(user_id=user.id, product_id=args["product_id"], comment_date=str(args["comment_date"])).first()
+    
 
-        if not result:
-            return "Bad request", 400
-
-        result.delete()
-        result.save()
+        if not selected_comment:
+            return "Bad Request", 400
+    
+        selected_comment.delete()
+        selected_comment.save()
         return "Success", 200
