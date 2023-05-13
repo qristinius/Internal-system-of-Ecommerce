@@ -46,14 +46,18 @@ class MessageApi(Resource):
             return "Bad request", 400        
 
 
-        sent_messages = [{ "title" : item.title, 
+        sent_messages = [{ "title" : item.title,
+                          "receiver": User.query.filter_by(id=item.receiver).first().email,
+                          "type": "sent",
                           "content":item.content, 
                           "file_path":item.file_path, 
-                          "date":item.date} for item in sent_msg]
-        received_messages = [{ "title" : item.title,
-                               "content":item.content, 
+                          "date":item.date} for item in sent_msg if not item.sender_deleted]
+        received_messages = [{"title" : item.title,
+                                "sender": User.query.filter_by(id=item.sender).first().email,
+                                "type": "received",
+                                "content":item.content, 
                                "file_path":item.file_path, 
-                               "date":item.date} for item in received_msg]
+                               "date":item.date} for item in received_msg if not item.receiver_deleted]
         data = {
             "sent messages": sent_messages,
             "received messages": received_messages
@@ -61,6 +65,47 @@ class MessageApi(Resource):
 
         
         return data,200
+
+    
+    @jwt_required()
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("receiver_mail", required=True, type=str)
+        parser.add_argument("type", required=True, type=str)
+        parser.add_argument("date", required=True, type=inputs.datetime_from_iso8601)
+
+        args = parser.parse_args()
+        current_user = get_jwt_identity()
+
+        user_1 = User.query.filter_by(email=current_user).first()
+        user_2 = User.query.filter_by(email=args["receiver_mail"]).first()
+
+        if not user_1.check_permission("can_send_message") and not user_2.check_permission("can_send_message"):
+            return "Bad request", 400
+        
+        if args["type"] == "sent":
+            message = Message.query.filter_by(sender=user_1.id, receiver=user_2.id, date=str(args["date"])).first()
+
+            message.sender_deleted = True
+            message.save()
+            return "Success", 200
+        
+        if args["type"] == "received":
+            message = Message.query.filter_by(sender=user_2.id, receiver=user_1.id, date=str(args["date"])).first()
+
+            message.receiver_deleted = True
+            message.save()
+            return "Success",200
+        
+        return "Bad request", 400
+
+
+    
+
+
+        
+        
+
             
 
 

@@ -12,7 +12,8 @@ class Message(BaseModel):
     content = db.Column(db.Text, nullable=False)
     file_path = db.Column(db.String)
     date = db.Column(db.Text)
-    deleted = db.Column(db.Boolean, default = False)
+    sender_deleted = db.Column(db.Boolean, default=False) #deleted for sender
+    receiver_deleted = db.Column(db.Boolean, default=False) #deleted for receiver
 
     sender_ref = db.relationship("User", backref = "sent_message", foreign_keys=[sender])
     receiver_ref = db.relationship("User", backref = "recieved_message", foreign_keys=[receiver])
