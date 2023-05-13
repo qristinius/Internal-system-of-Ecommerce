@@ -1,7 +1,6 @@
 from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User, Message
-from app.api.validators.address import validate_address_data
 from datetime import datetime
 
 

@@ -6,6 +6,7 @@ from app.api.comment import ProductCommentApi
 from app.api.mailconfirmation import ReceiveKeyApi, ConfirmEmailApi
 from app.api.score import ScoreApi
 from app.api.messages import MessageApi
+from app.api.delivery import DeliveryApi
 
 api = Api()
 api.add_resource(RegistrationApi, "/Registration")
@@ -18,4 +19,4 @@ api.add_resource(ReceiveKeyApi, "/ReceiveKey")
 api.add_resource(ConfirmEmailApi,"/ConfirmEmail")
 api.add_resource(ScoreApi, "/Score")
 api.add_resource(MessageApi, "/Message")
-
+api.add_resource(DeliveryApi, "/Editstatus")
