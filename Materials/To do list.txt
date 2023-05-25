@@ -6,11 +6,11 @@ API:
 4) ✔️ card
 5) ✔️ cart
 6) purchase
-7) product score
-8) product comment
-9) messages
+7) ✔️product score
+8) ✔️product comment
+9) ✔️messages
 10) profile
-11) delivery
+11) ✔️delivery
 12)data analyze
 13) create roles
-14) password recovery	(მეილს შეიყვანს იუზერი ჩვენ ამ მეილზე გავაგზავნით ნოთიფიქეიშენს და გადავიყვანთ ახალ ლინკზე სადაც შეიყვანს ახალ პაროლს)
+14) ✔️password recovery	(მეილს შეიყვანს იუზერი ჩვენ ამ მეილზე გავაგზავნით ნოთიფიქეიშენს და გადავიყვანთ ახალ ლინკზე სადაც შეიყვანს ახალ პაროლს)
